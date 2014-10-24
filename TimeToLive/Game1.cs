@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using System;
 namespace TimeToLive
 {
     /// <summary>
@@ -8,46 +9,16 @@ namespace TimeToLive
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Vector3 eye;
-        Vector3 up;
-        Vector3 at;
-
-        float fov;
-        //camera properties
-        float zNear;
-        float zFar;
-
-        BasicEffect basicEffect;
-        DynamicVertexBuffer vertexBuffer;
-        DynamicIndexBuffer indexBuffer;
-        VertexPositionColor[] cube;
-        float cubeRotation = 0.0f;
-        static ushort[] cubeIndices =
-    		{
-    			0,2,1, // -x
-    			1,2,3,
-
-    			4,5,6, // +x
-    			5,7,6,
-
-    			0,1,5, // -y
-    			0,5,4,
-
-    			2,6,7, // +y
-    			2,7,3,
-
-    			0,4,6, // -z
-    			0,6,2,
-
-    			1,3,7, // +z
-    			1,7,5,
-    		};
+        GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
+        public static int GameWidth;
+        public static int GameHeight;
+        private ScreenManager m_ScreenManager;
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            m_ScreenManager = new ScreenManager(this);
         }
 
         /// <summary>
@@ -59,32 +30,29 @@ namespace TimeToLive
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            zNear = 0.001f;
-            zFar = 1000.0f;
-            fov = MathHelper.Pi * 70.0f / 180.0f;
-            eye = new Vector3(0.0f, 0.7f, 1.5f);
-            at = new Vector3(0.0f, 0.0f, 0.0f);
-            up = new Vector3(0.0f, 1.0f, 0.0f);
+            GameWidth = GraphicsDevice.Viewport.Width;
+            GameHeight = GraphicsDevice.Viewport.Height;
 
-            cube = new VertexPositionColor[8];
-            cube[0] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, -0.5f), new Color(0.0f, 0.0f, 0.0f));
-            cube[1] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, 0.5f), new Color(0.0f, 0.0f, 1.0f));
-            cube[2] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, -0.5f), new Color(0.0f, 1.0f, 0.0f));
-            cube[3] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, 0.5f), new Color(0.0f, 1.0f, 1.0f));
-            cube[4] = new VertexPositionColor(new Vector3(0.5f, -0.5f, -0.5f), new Color(1.0f, 0.0f, 0.0f));
-            cube[5] = new VertexPositionColor(new Vector3(0.5f, -0.5f, 0.5f), new Color(1.0f, 0.0f, 1.0f));
-            cube[6] = new VertexPositionColor(new Vector3(0.5f, 0.5f, -0.5f), new Color(1.0f, 1.0f, 0.0f));
-            cube[7] = new VertexPositionColor(new Vector3(0.5f, 0.5f, 0.5f), new Color(1.0f, 1.0f, 1.0f));
+            //m_World = new World(new Vector2(0, 0));
+            //ConvertUnits.SetDisplayUnitToSimUnitRatio(5);
 
-            vertexBuffer = new DynamicVertexBuffer(graphics.GraphicsDevice, typeof(VertexPositionColor), 8, BufferUsage.WriteOnly);
-            indexBuffer = new DynamicIndexBuffer(graphics.GraphicsDevice, typeof(ushort), 36, BufferUsage.WriteOnly);
-
-            basicEffect = new BasicEffect(graphics.GraphicsDevice); //(device, null);
-            basicEffect.LightingEnabled = false;
-            basicEffect.VertexColorEnabled = true;
-            basicEffect.TextureEnabled = false;
-
-            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            //Player p = Player.Load(Content);
+            //if (p == null)
+            //{
+            //    Vector2 playerPosition = new Vector2(GameWidth / 2, GameHeight / 2);
+            //    m_Player.Init(Content, playerPosition);
+            //}
+            //else
+            //{
+            //    m_Player = p;
+            //}
+            ////init object manager and set objects for it
+            //GlobalObjectManager.Init(m_Player, Content, m_World);
+            TextureBank.SetContentManager(Content);
+            m_ScreenManager.AddScreen(new BackgroundScreen(), null);
+            //m_ScreenManager.AddScreen(new MainMenuScreen(), null);
+            m_ScreenManager.AddScreen(new CustomMenuScreen(), null);
+            m_ScreenManager.Initialize();
             base.Initialize();
         }
 
@@ -95,7 +63,8 @@ namespace TimeToLive
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            m_ScreenManager.LoadContent(GraphicsDevice, _spriteBatch);
             // TODO: use this.Content to load your game content here
         }
 
@@ -106,8 +75,9 @@ namespace TimeToLive
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            m_ScreenManager.UnloadContent();
+            ObjectManager.AllGameObjects.Clear();
         }
-
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -115,9 +85,14 @@ namespace TimeToLive
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
+            try
+            {
+                m_ScreenManager.Update(gameTime);
+                base.Update(gameTime);
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         /// <summary>
@@ -126,31 +101,24 @@ namespace TimeToLive
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // Compute camera matrices.
-            Matrix View = Matrix.CreateLookAt(eye, at, up);
-
-            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(fov, GraphicsDevice.Viewport.AspectRatio, zNear, zFar);
-            cubeRotation += (0.001f) * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            Matrix World = Matrix.CreateRotationY(cubeRotation);
-            // TODO: Add your drawing code here
-
-            vertexBuffer.SetData(cube, 0, 8, SetDataOptions.Discard);
-            indexBuffer.SetData(cubeIndices, 0, 36, SetDataOptions.Discard);
-
-            GraphicsDevice device = basicEffect.GraphicsDevice;
-            device.SetVertexBuffer(vertexBuffer);
-            device.Indices = indexBuffer;
-
-            basicEffect.View = View;
-            basicEffect.Projection = Projection;
-            basicEffect.World = World;
-            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 8, 0, 36);
-            }
+            //GraphicsDevice.Clear(Color.CornflowerBlue);
+            //switch (CurrentGameState) {
+            //    case GameState.Playing:
+            //        // TODO: Add your drawing code here
+            //        _spriteBatch.Begin();
+            //        UserInterface.DrawBackground(_spriteBatch);
+            //        GlobalObjectManager.Draw(_spriteBatch);
+            //        m_Player.Draw(_spriteBatch);
+            //        UserInterface.Draw(_spriteBatch, m_Player);
+            //        _spriteBatch.End();
+            //        break;
+            //    case GameState.Menu:
+            //        _spriteBatch.Begin();
+            //        m_Menu.Draw(_spriteBatch, m_Player);
+            //        _spriteBatch.End();
+            //        break;
+            //}
+            m_ScreenManager.Draw(gameTime);
             base.Draw(gameTime);
         }
     }

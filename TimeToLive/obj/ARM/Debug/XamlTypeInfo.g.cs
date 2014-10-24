@@ -9,17 +9,17 @@
 
 
 
-namespace Monogame_Windows_Phone_8._1
+namespace TimeToLive
 {
     public partial class App : global::Windows.UI.Xaml.Markup.IXamlMetadataProvider
     {
-        private global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlTypeInfoProvider _provider;
+        private global::TimeToLive.TimeToLive_XamlTypeInfo.XamlTypeInfoProvider _provider;
 
         public global::Windows.UI.Xaml.Markup.IXamlType GetXamlType(global::System.Type type)
         {
             if(_provider == null)
             {
-                _provider = new global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlTypeInfoProvider();
+                _provider = new global::TimeToLive.TimeToLive_XamlTypeInfo.XamlTypeInfoProvider();
             }
             return _provider.GetXamlTypeByType(type);
         }
@@ -28,7 +28,7 @@ namespace Monogame_Windows_Phone_8._1
         {
             if(_provider == null)
             {
-                _provider = new global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlTypeInfoProvider();
+                _provider = new global::TimeToLive.TimeToLive_XamlTypeInfo.XamlTypeInfoProvider();
             }
             return _provider.GetXamlTypeByName(fullName);
         }
@@ -40,7 +40,7 @@ namespace Monogame_Windows_Phone_8._1
     }
 }
 
-namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
+namespace TimeToLive.TimeToLive_XamlTypeInfo
 {
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks", "4.0.0.0")]    
@@ -125,12 +125,12 @@ namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
         private void InitTypeTables()
         {
             _typeNameTable = new string[3];
-            _typeNameTable[0] = "Monogame_Windows_Phone_8._1.GamePage";
+            _typeNameTable[0] = "TimeToLive.GamePage";
             _typeNameTable[1] = "Windows.UI.Xaml.Controls.SwapChainBackgroundPanel";
             _typeNameTable[2] = "Windows.UI.Xaml.Controls.Panel";
 
             _typeTable = new global::System.Type[3];
-            _typeTable[0] = typeof(global::Monogame_Windows_Phone_8._1.GamePage);
+            _typeTable[0] = typeof(global::TimeToLive.GamePage);
             _typeTable[1] = typeof(global::Windows.UI.Xaml.Controls.SwapChainBackgroundPanel);
             _typeTable[2] = typeof(global::Windows.UI.Xaml.Controls.Panel);
         }
@@ -167,31 +167,31 @@ namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
             return -1;
         }
 
-        private object Activate_0_GamePage() { return new global::Monogame_Windows_Phone_8._1.GamePage(); }
+        private object Activate_0_GamePage() { return new global::TimeToLive.GamePage(); }
 
         private global::Windows.UI.Xaml.Markup.IXamlType CreateXamlType(int typeIndex)
         {
-            global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlSystemBaseType xamlType = null;
-            global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlUserType userType;
+            global::TimeToLive.TimeToLive_XamlTypeInfo.XamlSystemBaseType xamlType = null;
+            global::TimeToLive.TimeToLive_XamlTypeInfo.XamlUserType userType;
             string typeName = _typeNameTable[typeIndex];
             global::System.Type type = _typeTable[typeIndex];
 
             switch (typeIndex)
             {
 
-            case 0:   //  Monogame_Windows_Phone_8._1.GamePage
-                userType = new global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.SwapChainBackgroundPanel"));
+            case 0:   //  TimeToLive.GamePage
+                userType = new global::TimeToLive.TimeToLive_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.SwapChainBackgroundPanel"));
                 userType.Activator = Activate_0_GamePage;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
             case 1:   //  Windows.UI.Xaml.Controls.SwapChainBackgroundPanel
-                xamlType = new global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                xamlType = new global::TimeToLive.TimeToLive_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
             case 2:   //  Windows.UI.Xaml.Controls.Panel
-                xamlType = new global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                xamlType = new global::TimeToLive.TimeToLive_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }
             return xamlType;
@@ -201,7 +201,7 @@ namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
 
         private global::Windows.UI.Xaml.Markup.IXamlMember CreateXamlMember(string longMemberName)
         {
-            global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlMember xamlMember = null;
+            global::TimeToLive.TimeToLive_XamlTypeInfo.XamlMember xamlMember = null;
             // No Local Properties
             return xamlMember;
         }
@@ -258,9 +258,9 @@ namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Windows.UI.Xaml.Build.Tasks", "4.0.0.0")]    
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    internal class XamlUserType : global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlSystemBaseType
+    internal class XamlUserType : global::TimeToLive.TimeToLive_XamlTypeInfo.XamlSystemBaseType
     {
-        global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlTypeInfoProvider _provider;
+        global::TimeToLive.TimeToLive_XamlTypeInfo.XamlTypeInfoProvider _provider;
         global::Windows.UI.Xaml.Markup.IXamlType _baseType;
         bool _isArray;
         bool _isMarkupExtension;
@@ -274,7 +274,7 @@ namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
         global::System.Collections.Generic.Dictionary<string, string> _memberNames;
         global::System.Collections.Generic.Dictionary<string, object> _enumValues;
 
-        public XamlUserType(global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlTypeInfoProvider provider, string fullName, global::System.Type fullType, global::Windows.UI.Xaml.Markup.IXamlType baseType)
+        public XamlUserType(global::TimeToLive.TimeToLive_XamlTypeInfo.XamlTypeInfoProvider provider, string fullName, global::System.Type fullType, global::Windows.UI.Xaml.Markup.IXamlType baseType)
             :base(fullName, fullType)
         {
             _provider = provider;
@@ -467,7 +467,7 @@ namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     internal class XamlMember : global::Windows.UI.Xaml.Markup.IXamlMember
     {
-        global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlTypeInfoProvider _provider;
+        global::TimeToLive.TimeToLive_XamlTypeInfo.XamlTypeInfoProvider _provider;
         string _name;
         bool _isAttachable;
         bool _isDependencyProperty;
@@ -476,7 +476,7 @@ namespace Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo
         string _typeName;
         string _targetTypeName;
 
-        public XamlMember(global::Monogame_Windows_Phone_8._1.Monogame_Windows_Phone_8_1_XamlTypeInfo.XamlTypeInfoProvider provider, string name, string typeName)
+        public XamlMember(global::TimeToLive.TimeToLive_XamlTypeInfo.XamlTypeInfoProvider provider, string name, string typeName)
         {
             _name = name;
             _typeName = typeName;
