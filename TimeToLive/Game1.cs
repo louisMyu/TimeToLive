@@ -14,6 +14,7 @@ namespace TimeToLive
         public static int GameWidth;
         public static int GameHeight;
         private ScreenManager m_ScreenManager;
+        Effect pointLight;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -32,6 +33,8 @@ namespace TimeToLive
             // TODO: Add your initialization logic here
             GameWidth = GraphicsDevice.Viewport.Width;
             GameHeight = GraphicsDevice.Viewport.Height;
+
+            _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
             //m_World = new World(new Vector2(0, 0));
             //ConvertUnits.SetDisplayUnitToSimUnitRatio(5);
