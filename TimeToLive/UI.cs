@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.IO;
 
 namespace TimeToLive
 {
@@ -29,9 +31,9 @@ namespace TimeToLive
         private Texture2D m_HeartTexture;
         private Texture2D m_SkullBackground;
 
-        //private Vector2 ThumbStickPoint;
-        //how much the thumbstick is currently offset from the center in pixels
-        public static Vector2 ThumbStickPointOffset;
+        public Effect m_SkullLeftEyePointLight;
+        public Effect m_SkullRightEyePointLight;
+
         //private int ThumbStickPointId;
         //private bool ThumbStickPressed;
         private SpriteFont ColunaFont;
@@ -85,6 +87,12 @@ namespace TimeToLive
 
             m_HeartTexture = TextureBank.GetTexture("Heart50x45");
             m_SkullBackground = TextureBank.GetTexture("isolatedSkullBG01");
+
+            m_SkullLeftEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
+            m_SkullRightEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
+            m_SkullLeftEyePointLight.Parameters["centerX"].SetValue(546.0f);
+            m_SkullLeftEyePointLight.Parameters["centerY"].SetValue(307.0f);
+
         }
 
         public void Update(TimeSpan elapsedTime)

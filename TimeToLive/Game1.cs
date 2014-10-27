@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System;
+using System.Reflection;
+using System.IO;
 namespace TimeToLive
 {
     /// <summary>
@@ -14,7 +16,7 @@ namespace TimeToLive
         public static int GameWidth;
         public static int GameHeight;
         private ScreenManager m_ScreenManager;
-        Effect pointLight;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -69,6 +71,8 @@ namespace TimeToLive
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             m_ScreenManager.LoadContent(GraphicsDevice, _spriteBatch);
             // TODO: use this.Content to load your game content here
+
+
         }
 
         /// <summary>
@@ -123,6 +127,16 @@ namespace TimeToLive
             //}
             m_ScreenManager.Draw(gameTime);
             base.Draw(gameTime);
+        }
+
+        public Effect LoadShader(string path)
+        {
+            var assembly = this.GetType().GetTypeInfo().Assembly;
+            var temp = this.GetType().GetTypeInfo().Assembly.GetManifestResourceNames();
+            Stream s = assembly.GetManifestResourceStream(path);
+            //Stream s = assembly.GetManifestResourceStream("SpriteEffectsSample.Content.diffusemap.mgfxo");
+            BinaryReader Reader = new BinaryReader(s);
+            return new Effect(_graphics.GraphicsDevice, Reader.ReadBytes((int)Reader.BaseStream.Length));
         }
     }
 }

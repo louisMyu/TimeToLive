@@ -295,10 +295,14 @@ namespace TimeToLive
                 case GameState.Playing:
                     _spriteBatch.Begin();
                     _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
+                    _spriteBatch.End();
                     if (UserInterface.TimeAlmostOut)
                     {
+                        _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, UserInterface.m_SkullLeftEyePointLight);
                         UserInterface.DrawSkullBackground(_spriteBatch);
+                        _spriteBatch.End();
                     }
+                    _spriteBatch.Begin();
                     UserInterface.DrawDeathTimer(_spriteBatch);
                     GlobalObjectManager.DrawSlimeTrails(_spriteBatch);
                     GlobalObjectManager.DrawPowerUps(_spriteBatch);
