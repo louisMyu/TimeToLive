@@ -45,6 +45,8 @@ namespace TimeToLive
 
         bool traceEnabled;
 
+        public Matrix ResolutionTransformationMaxtrix;
+        public static Vector2 NativeResolution;
         #endregion
 
         #region Properties
@@ -126,6 +128,12 @@ namespace TimeToLive
             {
                 screen.LoadContent();
             }
+
+            NativeResolution = new Vector2(1280, 720);
+            float horScaling = device.PresentationParameters.BackBufferWidth / 1280f;
+            float verScaling = device.PresentationParameters.BackBufferHeight / 720f;
+            Vector3 scale = new Vector3(horScaling, verScaling, 1);
+            ResolutionTransformationMaxtrix = Matrix.CreateScale(scale);
         }
 
 
@@ -221,12 +229,13 @@ namespace TimeToLive
         public void Draw(GameTime gameTime)
         {
             GraphicsDevice.SetRenderTarget(null);
+
             foreach (GameScreen screen in screens)
             {
                 if (screen.ScreenState == ScreenState.Hidden)
                     continue;
 
-                screen.Draw(gameTime);
+                screen.Draw(gameTime, ResolutionTransformationMaxtrix);
             }
         }
 

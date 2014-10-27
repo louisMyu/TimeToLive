@@ -112,7 +112,7 @@ namespace TimeToLive
                 MenuEntry menuEntry = menuEntries[i];
 
                 // each entry is to be centered horizontally
-                position.X = ScreenManager.GraphicsDevice.Viewport.Width / 2 - menuEntry.GetWidth(this) / 2;
+                position.X = ScreenManager.NativeResolution.X / 2 - menuEntry.GetWidth(this) / 2;
 
                 if (ScreenState == ScreenState.TransitionOn)
                     position.X -= transitionOffset * 256;

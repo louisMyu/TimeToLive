@@ -67,8 +67,8 @@ namespace TimeToLive
             m_StatusBackgroundPosition = new Vector2(0, 0);
             m_StatusBackGroundScale = Utilities.GetSpriteScaling(new Vector2(OFFSET, height), new Vector2(m_StatusBackground.Width, m_StatusBackground.Height));
             PlayfieldBottom = OFFSET;
-            GameWidth = width;
-            GameHeight = height;
+            GameWidth = ScreenManager.NativeResolution.X;
+            GameHeight = ScreenManager.NativeResolution.Y;
             m_Background = content.Load<Texture2D>("Louis-game-backgroundFULL");
 
             ActiveGibs.Clear();

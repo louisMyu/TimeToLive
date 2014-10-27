@@ -33,8 +33,7 @@ namespace TimeToLive
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            GameWidth = GraphicsDevice.Viewport.Width;
-            GameHeight = GraphicsDevice.Viewport.Height;
+
 
             _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
@@ -70,6 +69,8 @@ namespace TimeToLive
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             m_ScreenManager.LoadContent(GraphicsDevice, _spriteBatch);
+            GameWidth = (int)ScreenManager.NativeResolution.X;
+            GameHeight = (int)ScreenManager.NativeResolution.Y;
             // TODO: use this.Content to load your game content here
 
 

@@ -90,13 +90,14 @@ namespace TimeToLive
         /// <summary>
         /// Draws the background screen.
         /// </summary>
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, Matrix scale)
         {
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             Rectangle fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
+                                            null);
 
             spriteBatch.Draw(backgroundTexture, fullscreen,
                              new Color(TransitionAlpha, TransitionAlpha, TransitionAlpha));

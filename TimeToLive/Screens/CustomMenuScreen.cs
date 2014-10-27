@@ -35,10 +35,10 @@ namespace TimeToLive
         public void LoadBounds()
         {
             GraphicsDevice graphics = ScreenManager.GraphicsDevice;
-            Rectangle playGameRec = new Rectangle((int)(graphics.Viewport.Width * 0.1), (int)(graphics.Viewport.Height - graphics.Viewport.Height * .1 - Utilities.RatioFrom1280(50)), Utilities.RatioFrom720(200), Utilities.RatioFrom1280(50));
-            Rectangle optionRec = new Rectangle((int)(graphics.Viewport.Width - graphics.Viewport.Width * 0.1 - 200), (int)(graphics.Viewport.Height - graphics.Viewport.Height * .1 - 50), 200, 50);
-            gameMenuEntry.SetBounds(playGameRec);
-            optionMenuEntry.SetBounds(optionRec);
+            Rectangle playGameRec = new Rectangle((int)(ScreenManager.NativeResolution.X * 0.1), (int)(ScreenManager.NativeResolution.Y - ScreenManager.NativeResolution.Y * .1 - 50), 200, 50);
+            Rectangle optionRec = new Rectangle((int)(ScreenManager.NativeResolution.X - ScreenManager.NativeResolution.X * 0.1 - 200), (int)(ScreenManager.NativeResolution.Y - ScreenManager.NativeResolution.Y * .1 - 50), 200, 50);
+            gameMenuEntry.SetBounds(playGameRec, ScreenManager.ResolutionTransformationMaxtrix);
+            optionMenuEntry.SetBounds(optionRec, ScreenManager.ResolutionTransformationMaxtrix);
         }
 
         #endregion
@@ -49,7 +49,9 @@ namespace TimeToLive
         {
             if (entry is CustomMenuEntry)
             {
-                return ((CustomMenuEntry)entry).Bounds;
+                //we should return the scaled values to represent actual pixels on the screen, instead of the native representation
+                //that is used throughout the code
+                return ((CustomMenuEntry)entry).RealBounds;
             }
             return new Rectangle();
         }
@@ -99,12 +101,12 @@ namespace TimeToLive
 
             // start at Y = 175; each X value is generated per entry
             //Vector2 position = new Vector2(0f, 175f);
-            Vector2 playGamePosition = new Vector2(gameMenuEntry.Bounds.X, gameMenuEntry.Bounds.Y);
-            playGamePosition.X += gameMenuEntry.Bounds.Width / 2;
-            playGamePosition.Y += gameMenuEntry.Bounds.Height / 2;
-            Vector2 optionsPosition = new Vector2(optionMenuEntry.Bounds.X, optionMenuEntry.Bounds.Y);
-            optionsPosition.X += optionMenuEntry.Bounds.Width / 2;
-            optionsPosition.Y += optionMenuEntry.Bounds.Height / 2;
+            Vector2 playGamePosition = new Vector2(gameMenuEntry.NativeBounds.X, gameMenuEntry.NativeBounds.Y);
+            playGamePosition.X += gameMenuEntry.NativeBounds.Width / 2;
+            playGamePosition.Y += gameMenuEntry.NativeBounds.Height / 2;
+            Vector2 optionsPosition = new Vector2(optionMenuEntry.NativeBounds.X, optionMenuEntry.NativeBounds.Y);
+            optionsPosition.X += optionMenuEntry.NativeBounds.Width / 2;
+            optionsPosition.Y += optionMenuEntry.NativeBounds.Height / 2;
 
             if (ScreenState == ScreenState.TransitionOn)
                 playGamePosition.X -= transitionOffset * 256;
@@ -123,7 +125,7 @@ namespace TimeToLive
         /// <summary>
         /// Draws the menu.
         /// </summary>
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, Matrix scale)
         {
             if (!loaded)
             {
@@ -136,7 +138,8 @@ namespace TimeToLive
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
+                                            null, scale);
 
             // Draw each menu entry in turn.
 
@@ -150,7 +153,7 @@ namespace TimeToLive
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
             // Draw the menu title centered on the screen
-            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, graphics.Viewport.Height / 2);
+            Vector2 titlePosition = new Vector2(ScreenManager.NativeResolution.X / 2, ScreenManager.NativeResolution.Y / 2);
             Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             float titleScale = 1.25f;

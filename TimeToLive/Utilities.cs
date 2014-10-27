@@ -85,14 +85,6 @@ namespace TimeToLive
                 list[n] = value;
             }
         }
-        public static int RatioFrom720(int val)
-        {
-            return (int)((val / 720.0) * Game1.GameHeight);
-        }
-        public static int RatioFrom1280(int val)
-        {
-            return (int)((val / 1280.0) * Game1.GameWidth);
-        }
     }
 
     //0_o

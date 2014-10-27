@@ -160,7 +160,7 @@ namespace TimeToLive
         /// <summary>
         /// Draws the message box.
         /// </summary>
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, Matrix scale)
         {
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
@@ -193,7 +193,8 @@ namespace TimeToLive
             // Fade the popup alpha during transitions.
             Color color = Color.White * TransitionAlpha;
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null,
+                                null, scale);
 
             // Draw the background rectangle.
             spriteBatch.Draw(gradientTexture, backgroundRectangle, color);

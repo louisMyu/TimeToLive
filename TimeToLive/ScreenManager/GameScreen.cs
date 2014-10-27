@@ -339,7 +339,7 @@ namespace TimeToLive
         /// <summary>
         /// This is called when the screen should draw itself.
         /// </summary>
-        public virtual void Draw(GameTime gameTime) { }
+        public virtual void Draw(GameTime gameTime, Matrix resolutionScale) { }
 
 
         #endregion

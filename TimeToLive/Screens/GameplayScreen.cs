@@ -55,6 +55,7 @@ namespace TimeToLive
         private GameState m_GameState;
         private bool songPlaying = false;
         RenderTarget2D backgroundTexture;
+
         #endregion
 
         #region Initialization
@@ -281,7 +282,7 @@ namespace TimeToLive
         /// <summary>
         /// Draws the gameplay screen.
         /// </summary>
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, Matrix scale)
         {
             //make sure the game has loaded and has updated at least one frame
             if (!isLoaded || !isUpdated)
@@ -293,16 +294,19 @@ namespace TimeToLive
             {
                 case GameState.Dying:
                 case GameState.Playing:
-                    _spriteBatch.Begin();
+                    _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
+                                            null, scale);
                     _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
                     _spriteBatch.End();
                     if (UserInterface.TimeAlmostOut)
                     {
-                        _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null, UserInterface.m_SkullLeftEyePointLight);
+                        _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, 
+                                            UserInterface.m_SkullLeftEyePointLight, scale);
                         UserInterface.DrawSkullBackground(_spriteBatch);
                         _spriteBatch.End();
                     }
-                    _spriteBatch.Begin();
+                    _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
+                                            null, scale);
                     UserInterface.DrawDeathTimer(_spriteBatch);
                     GlobalObjectManager.DrawSlimeTrails(_spriteBatch);
                     GlobalObjectManager.DrawPowerUps(_spriteBatch);
@@ -313,7 +317,8 @@ namespace TimeToLive
                     _spriteBatch.End();
                     break;
                 case GameState.Countdown:
-                    _spriteBatch.Begin();
+                    _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
+                        null, scale);
                     _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
                     //GlobalObjectManager.Draw(_spriteBatch);
                     //m_Player.Draw(_spriteBatch);
@@ -322,7 +327,8 @@ namespace TimeToLive
                     _spriteBatch.End();
                     break;
                 case GameState.MainScreen:
-                    _spriteBatch.Begin();
+                    _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
+                        null, scale);
                     _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), Color.White);
                     _spriteBatch.End();
                     break;

@@ -27,7 +27,7 @@ namespace TimeToLive
         #region Fields
 
         // the number of pixels to pad above and below menu entries for touch input
-        protected const int menuEntryPadding = 100;
+        protected const int menuEntryPadding = 50;
 
         protected List<MenuEntry> menuEntries = new List<MenuEntry>();
         int selectedEntry = 0;
@@ -182,7 +182,7 @@ namespace TimeToLive
                 MenuEntry menuEntry = menuEntries[i];
                 
                 // each entry is to be centered horizontally
-                position.X = ScreenManager.GraphicsDevice.Viewport.Width / 2 - menuEntry.GetWidth(this) / 2;
+                position.X = ScreenManager.NativeResolution.X / 2 - menuEntry.GetWidth(this) / 2;
 
                 if (ScreenState == ScreenState.TransitionOn)
                     position.X -= transitionOffset * 256;
@@ -218,16 +218,16 @@ namespace TimeToLive
         /// <summary>
         /// Draws the menu.
         /// </summary>
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, Matrix scale)
         {
             // make sure our entries are in the right place before we draw them
             UpdateMenuEntryLocations();
 
-            GraphicsDevice graphics = ScreenManager.GraphicsDevice;
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null,
+                                null, scale);
 
             // Draw each menu entry in turn.
             for (int i = 0; i < menuEntries.Count; i++)
@@ -245,7 +245,7 @@ namespace TimeToLive
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
             // Draw the menu title centered on the screen
-            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 80);
+            Vector2 titlePosition = new Vector2(ScreenManager.NativeResolution.X / 2, 80);
             Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             float titleScale = 1.25f;
