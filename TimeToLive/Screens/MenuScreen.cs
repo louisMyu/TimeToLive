@@ -92,12 +92,6 @@ namespace TimeToLive
         /// </summary>
         public override void HandleInput(Input input)
         {
-            // we cancel the current menu screen if the user presses the back button
-            if (input.IsNewKeyPress(Buttons.Back))
-            {
-                OnCancel();
-            }
-
             // look for any taps that occurred and select any entries that were tapped
             foreach (GestureSample gesture in input.Gestures)
             {

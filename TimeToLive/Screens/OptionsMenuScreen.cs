@@ -25,7 +25,7 @@ namespace TimeToLive
         MenuEntry ungulateMenuEntry;
         MenuEntry languageMenuEntry;
         MenuEntry frobnicateMenuEntry;
-        MenuEntry elfMenuEntry;
+        MenuEntry BackMenuEntry;
 
         enum Ungulate
         {
@@ -40,8 +40,6 @@ namespace TimeToLive
         static int currentLanguage = 0;
 
         static bool frobnicate = true;
-
-        static int elf = 23;
 
         #endregion
 
@@ -58,7 +56,7 @@ namespace TimeToLive
             ungulateMenuEntry = new MenuEntry(string.Empty);
             languageMenuEntry = new MenuEntry(string.Empty);
             frobnicateMenuEntry = new MenuEntry(string.Empty);
-            elfMenuEntry = new MenuEntry(string.Empty);
+            BackMenuEntry = new MenuEntry(string.Empty);
 
             SetMenuEntryText();
 
@@ -66,13 +64,13 @@ namespace TimeToLive
             ungulateMenuEntry.Selected += UngulateMenuEntrySelected;
             languageMenuEntry.Selected += LanguageMenuEntrySelected;
             frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
-            elfMenuEntry.Selected += ElfMenuEntrySelected;
+            BackMenuEntry.Selected += BackMenuEntrySelected;
             
             // Add entries to the menu.
             MenuEntries.Add(ungulateMenuEntry);
             MenuEntries.Add(languageMenuEntry);
             MenuEntries.Add(frobnicateMenuEntry);
-            MenuEntries.Add(elfMenuEntry);
+            MenuEntries.Add(BackMenuEntry);
         }
 
 
@@ -84,7 +82,7 @@ namespace TimeToLive
             ungulateMenuEntry.Text = "Preferred ungulate: " + currentUngulate;
             languageMenuEntry.Text = "Language: " + languages[currentLanguage];
             frobnicateMenuEntry.Text = "Frobnicate: " + (frobnicate ? "on" : "off");
-            elfMenuEntry.Text = "elf: " + elf;
+            BackMenuEntry.Text = "Go Back";
         }
 
 
@@ -132,11 +130,9 @@ namespace TimeToLive
         /// <summary>
         /// Event handler for when the Elf menu entry is selected.
         /// </summary>
-        void ElfMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void BackMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            elf++;
-
-            SetMenuEntryText();
+            OnCancel();
         }
 
 
