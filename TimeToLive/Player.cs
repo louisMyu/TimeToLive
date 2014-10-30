@@ -118,7 +118,7 @@ namespace TimeToLive
                         {
                             IEnemy enemy = ob as IEnemy;
                             //get the amount of time that should be removed from the enemy and remove it from the player
-                            TimeToDeath -= enemy.GetDamageAmount();
+                            //TimeToDeath -= enemy.GetDamageAmount();
                             //do collision should take care of removing the enemy
                             enemy.DoCollision(this);
                             if (TimeToDeath.TotalSeconds <= 0)

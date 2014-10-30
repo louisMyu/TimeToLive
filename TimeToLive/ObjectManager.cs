@@ -26,8 +26,6 @@ namespace TimeToLive
         public static Player m_Player;
         private ContentManager m_Content;
         private World m_World;
-        private static int NumZombies = 0;
-        private static int MaxZombies = 5;
         private PowerUp m_PowerUp;
 
         private List<SpawnTimer> m_SpawnTimers;
@@ -67,7 +65,7 @@ namespace TimeToLive
             AllGameObjects = new List<GameObject>();
 
             m_SpawnTimers = new List<SpawnTimer>();
-            m_SpawnTimers.Add(new SpawnTimer(2000, SpawnZombie, "Zombie"));
+            m_SpawnTimers.Add(new SpawnTimer(200, SpawnZombie, "Zombie"));
             m_SpawnTimers.Add(new SpawnTimer(4000, SpawnFace, "Anubis"));
             m_SpawnTimers.Add(new SpawnTimer(4000, SpawnShroom, "Shroom"));
             m_SpawnTimers.Add(new SpawnTimer(5500, MakeItem, "Item"));
@@ -214,10 +212,6 @@ namespace TimeToLive
             if (obj is IEnemy)
             {
                 ((IEnemy)obj).CleanBody();
-                if (obj is Zombie)
-                {
-                    --NumZombies;
-                }
             }
             obj.CanDelete = true;
         }
@@ -230,7 +224,6 @@ namespace TimeToLive
             itemMade = false;
             face = false;
             m_Player.Score = 0;
-            NumZombies = 0;
         }
         private void SpawnZombie()
         {
@@ -254,7 +247,6 @@ namespace TimeToLive
             z.Position = temp;
             z.LoadContent(m_World);
             AllGameObjects.Add(z);
-            ++NumZombies;
         }
 
         private void MakeItem()

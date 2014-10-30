@@ -116,10 +116,10 @@ namespace TimeToLive
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
             GraphicsDevice device = ScreenManager.GraphicsDevice;
-            device.SetRenderTarget(backgroundTexture);
-            spriteBatch.Begin();
-            UserInterface.DrawBackground(spriteBatch);
-            spriteBatch.End();
+            //device.SetRenderTarget(backgroundTexture);
+            //spriteBatch.Begin();
+            //UserInterface.DrawBackground(spriteBatch);
+            //spriteBatch.End();
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -243,11 +243,11 @@ namespace TimeToLive
                 }
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
-                GraphicsDevice device = ScreenManager.GraphicsDevice;
-                device.SetRenderTarget(backgroundTexture);
-                spriteBatch.Begin();
-                UserInterface.DrawBakedGibs(spriteBatch);
-                spriteBatch.End();
+                //GraphicsDevice device = ScreenManager.GraphicsDevice;
+                //device.SetRenderTarget(backgroundTexture);
+                //spriteBatch.Begin();
+                //UserInterface.DrawBakedGibs(spriteBatch);
+                //spriteBatch.End();
                 // TODO: this game isn't very fun! You could probably improve
                 // it by inserting something more interesting in this space :-)
             }
@@ -296,7 +296,8 @@ namespace TimeToLive
                 case GameState.Playing:
                     _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
                                             null, scale);
-                    _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
+                   // _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
+                    UserInterface.DrawBackground(_spriteBatch);
                     _spriteBatch.End();
                     if (UserInterface.TimeAlmostOut)
                     {
@@ -319,7 +320,8 @@ namespace TimeToLive
                 case GameState.Countdown:
                     _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
                         null, scale);
-                    _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
+                    //_spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
+                    UserInterface.DrawBackground(_spriteBatch);
                     //GlobalObjectManager.Draw(_spriteBatch);
                     //m_Player.Draw(_spriteBatch);
                     UserInterface.Draw(_spriteBatch, m_Player);
@@ -329,7 +331,8 @@ namespace TimeToLive
                 case GameState.MainScreen:
                     _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null,
                         null, scale);
-                    _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), Color.White);
+                    //_spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), Color.White);
+                    UserInterface.DrawBackground(_spriteBatch);
                     _spriteBatch.End();
                     break;
             }

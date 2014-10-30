@@ -166,7 +166,7 @@ namespace TimeToLive
             ++m_SlimeTrailTimeCounter;
             if (m_SlimeTrailTimeCounter % SLIME_TRAIL_SKIP_TIME == 0)
             {
-                AddSlimePiece();
+                //AddSlimePiece();
                 m_SlimeTrailTimeCounter = 0;
             }
             bodyPosition = _circleBody.Position;
