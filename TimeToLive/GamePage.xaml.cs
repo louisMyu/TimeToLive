@@ -25,12 +25,20 @@ namespace TimeToLive
         readonly Game1 _game;
         public GamePage()
         {
+            hideShit();
             this.InitializeComponent();
         }
 
         public GamePage(string launchArguments)
         {
+            hideShit();
             _game = XamlGame<Game1>.Create(launchArguments, Window.Current.CoreWindow, this);
+        }
+        //why was it so hard to find how to do this?!
+        async void hideShit()
+        {
+            await Windows.UI.ViewManagement.StatusBar.GetForCurrentView().HideAsync();
+            Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().SuppressSystemOverlays = true;
         }
     }
 }

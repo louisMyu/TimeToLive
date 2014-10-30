@@ -20,19 +20,19 @@ namespace TimeToLive
         /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
-        public DeathMenu()
+        public DeathMenu(UnPauseGamePlayScreen callback)
             : base("You Died!")
         {
             // Create our menu entries.
             MenuEntry NewGameEntry = new MenuEntry("Try Again");
             MenuEntry UpgradeMenuEntry = new MenuEntry("Upgrade");
             MenuEntry optionsMenuEntry = new MenuEntry("Options");
-            MenuEntry ExitGameMenuEntry = new MenuEntry("Exit Game");
+            MenuEntry ExitGameMenuEntry = new MenuEntry("Return To Main Menu");
 
             // Hook up menu event handlers.
             NewGameEntry.Selected += NewGameMenuEntrySelected;
             UpgradeMenuEntry.Selected += UpgradeMenuEntrySelected;
-            ExitGameMenuEntry.Selected += ExitGameMenuEntrySelected;
+            ExitGameMenuEntry.Selected += ReturnToMainEntrySelected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
 
             // Add entries to the menu.
@@ -43,9 +43,12 @@ namespace TimeToLive
             IsPopup = true;
             song = SoundBank.GetSoundInstance("menuMusic");
             StartbackgroundMusic();
+
+            UnPauseGameCallback = callback;
         }
 
-
+        public delegate void UnPauseGamePlayScreen();
+        UnPauseGamePlayScreen UnPauseGameCallback;
         #endregion
         private void StartbackgroundMusic()
         {
@@ -63,11 +66,12 @@ namespace TimeToLive
         /// <summary>
         /// Event handler for when the Play Game menu entry is selected.
         /// </summary>
-        void ExitGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void ReturnToMainEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             song.Stop();
-
-            //app needs to exit here
+            UnPauseGameCallback();
+            ScreenManager.AddScreen(new CustomMenuScreen(), null);
+            OnCancel();
         }
 
         void UpgradeMenuEntrySelected(object sender, PlayerIndexEventArgs e)

@@ -341,7 +341,17 @@ namespace TimeToLive
         private void PushDeathScreen()
         {
             isPaused = true;
-            ScreenManager.AddScreen(new DeathMenu(), null);
+            DeathMenu deathMenu = new DeathMenu(UnPauseGame);
+            ScreenManager.AddScreen(deathMenu, null);
+        }
+        private void UnPauseGame()
+        {
+            m_GameState = GameState.MainScreen;
+            isPaused = false;
+        }
+        private void PauseGame()
+        {
+            isPaused = true;
         }
         #endregion
     }
