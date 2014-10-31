@@ -220,7 +220,7 @@ namespace TimeToLive
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null,
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                                 null, scale);
 
             // Draw each menu entry in turn.

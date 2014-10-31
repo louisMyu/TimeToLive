@@ -193,7 +193,7 @@ namespace TimeToLive
             // Fade the popup alpha during transitions.
             Color color = Color.White * TransitionAlpha;
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null,
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                                 null, scale);
 
             // Draw the background rectangle.

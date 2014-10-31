@@ -155,7 +155,7 @@ namespace TimeToLive
                 Color color = Color.White * TransitionAlpha;
 
                 // Draw the text.
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, null, null, null,
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                                 null, scale);
                 spriteBatch.DrawString(font, message, textPosition, color);
                 spriteBatch.End();
