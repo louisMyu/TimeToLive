@@ -243,6 +243,7 @@ namespace TimeToLive
             //    part.Draw(spriteBatch, BackGroundHueColor);
             //}
         }
+
         public void DrawBakedGibs(SpriteBatch spriteBatch)
         {
             foreach (ExplodedPart part in BakedGibs)
