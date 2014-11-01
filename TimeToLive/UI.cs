@@ -238,10 +238,10 @@ namespace TimeToLive
         }
         public void DrawActiveGibs(SpriteBatch spriteBatch)
         {
-            foreach (ExplodedPart part in ActiveGibs)
-            {
-                part.Draw(spriteBatch, BackGroundHueColor);
-            }
+            //foreach (ExplodedPart part in ActiveGibs)
+            //{
+            //    part.Draw(spriteBatch, BackGroundHueColor);
+            //}
         }
         public void DrawBakedGibs(SpriteBatch spriteBatch)
         {
