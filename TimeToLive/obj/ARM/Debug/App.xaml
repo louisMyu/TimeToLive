@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="Monogame_Windows_Phone_8._1.App"
+    x:Class="TimeToLive.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Monogame_Windows_Phone_8._1">
+    xmlns:local="using:TimeToLive">
 
 </Application>
 

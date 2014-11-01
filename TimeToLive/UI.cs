@@ -88,10 +88,10 @@ namespace TimeToLive
             m_HeartTexture = TextureBank.GetTexture("Heart50x45");
             m_SkullBackground = TextureBank.GetTexture("isolatedSkullBG01");
 
-            m_SkullLeftEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
-            m_SkullRightEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
-            m_SkullLeftEyePointLight.Parameters["centerX"].SetValue(546.0f);
-            m_SkullLeftEyePointLight.Parameters["centerY"].SetValue(307.0f);
+            //m_SkullLeftEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
+            //m_SkullRightEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
+            //m_SkullLeftEyePointLight.Parameters["centerX"].SetValue(546.0f);
+            //m_SkullLeftEyePointLight.Parameters["centerY"].SetValue(307.0f);
 
         }
 
@@ -215,21 +215,10 @@ namespace TimeToLive
 
         public void Draw(SpriteBatch spriteBatch, Player p)
         {
-            spriteBatch.Draw(m_HeartTexture, new Vector2(m_HeartTexture.Width / 2, m_HeartTexture.Height / 2), null, Color.White, 0,
-                new Vector2(m_HeartTexture.Width / 2, m_HeartTexture.Height / 2), new Vector2(1,1),SpriteEffects.None, 0f);
-            ////TODO CHANGE THE MAGIC NUMBERS HERE                                                          \/\/\/
-            //spriteBatch.DrawString(m_SpriteFont, "Life: " + p.LifeTotal, new Vector2(PlayfieldBottom - 50, GameHeight - 550), Color.White, Utilities.DegreesToRadians(90.0f), new Vector2(0, 0), 1f, SpriteEffects.None, 0.0f);
-            //spriteBatch.DrawString(m_SpriteFont, "XP: " + p.Score, new Vector2(PlayfieldBottom - 80, GameHeight - 550), Color.White, Utilities.DegreesToRadians(90.0f), new Vector2(0, 0), 1f, SpriteEffects.None, 0.0f);
-            //spriteBatch.Draw(m_FireButton, FireButtonPosition, null, m_FireButtonColor, 0.0f, new Vector2(0, 0), m_FireButtonScale, SpriteEffects.None, 0);
-            //spriteBatch.Draw(m_ThumbStickBottomTexture, StopButtonPosition, null, m_StopButtonColor, 0.0f, new Vector2(0,0), m_StopButtonScale, SpriteEffects.None, 0);
-            
-            //spriteBatch.Draw(m_ThumbStickTopTexture, ThumbStickPoint, null, Color.White, 0.0f, new Vector2(0, 0), m_StopButtonScale, SpriteEffects.None, 0);
-
-
-            if (p.DrawRedFlash)
-            {
-                spriteBatch.Draw(p.RedFlashTexture, new Vector2(PlayfieldBottom, 0), null, Color.White, 0, new Vector2(0,0),Utilities.GetSpriteScaling(new Vector2(GameWidth-PlayfieldBottom, GameHeight), new Vector2(p.RedFlashTexture.Width, p.RedFlashTexture.Height)) ,SpriteEffects.None, 0);
-            }
+            //if (p.DrawRedFlash)
+            //{
+            //    spriteBatch.Draw(p.RedFlashTexture, new Vector2(PlayfieldBottom, 0), null, Color.White, 0, new Vector2(0,0),Utilities.GetSpriteScaling(new Vector2(GameWidth-PlayfieldBottom, GameHeight), new Vector2(p.RedFlashTexture.Width, p.RedFlashTexture.Height)) ,SpriteEffects.None, 0);
+            //}
 
         }
         public void DrawBackground(SpriteBatch spriteBatch)
@@ -243,7 +232,6 @@ namespace TimeToLive
             //    part.Draw(spriteBatch, BackGroundHueColor);
             //}
         }
-
         public void DrawBakedGibs(SpriteBatch spriteBatch)
         {
             foreach (ExplodedPart part in BakedGibs)

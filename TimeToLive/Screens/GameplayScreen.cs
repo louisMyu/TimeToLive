@@ -116,10 +116,10 @@ namespace TimeToLive
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
             GraphicsDevice device = ScreenManager.GraphicsDevice;
-            device.SetRenderTarget(backgroundTexture);
-            spriteBatch.Begin();
-            UserInterface.DrawBackground(spriteBatch);
-            spriteBatch.End();
+            //device.SetRenderTarget(backgroundTexture);
+            //spriteBatch.Begin();
+            //UserInterface.DrawBackground(spriteBatch);
+            //spriteBatch.End();
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -243,11 +243,11 @@ namespace TimeToLive
                 }
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
-                GraphicsDevice device = ScreenManager.GraphicsDevice;
-                device.SetRenderTarget(backgroundTexture);
-                spriteBatch.Begin();
-                UserInterface.DrawBakedGibs(spriteBatch);
-                spriteBatch.End();
+                //GraphicsDevice device = ScreenManager.GraphicsDevice;
+                //device.SetRenderTarget(backgroundTexture);
+                //spriteBatch.Begin();
+                //UserInterface.DrawBakedGibs(spriteBatch);
+                //spriteBatch.End();
                 // TODO: this game isn't very fun! You could probably improve
                 // it by inserting something more interesting in this space :-)
             }
@@ -300,10 +300,10 @@ namespace TimeToLive
                     _spriteBatch.End();
                     if (UserInterface.TimeAlmostOut)
                     {
-                        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, 
-                                            UserInterface.m_SkullLeftEyePointLight, scale);
-                        UserInterface.DrawSkullBackground(_spriteBatch);
-                        _spriteBatch.End();
+                        //_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, 
+                        //                    UserInterface.m_SkullLeftEyePointLight, scale);
+                        //UserInterface.DrawSkullBackground(_spriteBatch);
+                        //_spriteBatch.End();
                     }
                     _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                                             null, scale);

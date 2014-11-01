@@ -126,6 +126,7 @@ namespace TimeToLive
             //        _spriteBatch.End();
             //        break;
             //}
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             m_ScreenManager.Draw(gameTime);
             base.Draw(gameTime);
         }
