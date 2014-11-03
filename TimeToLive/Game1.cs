@@ -126,15 +126,9 @@ namespace TimeToLive
             //        _spriteBatch.End();
             //        break;
             //}
-            try
-            {
-                GraphicsDevice.Clear(Color.CornflowerBlue);
-                m_ScreenManager.Draw(gameTime);
-                base.Draw(gameTime);
-            }
-            catch (Exception e)
-            {
-            }
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            m_ScreenManager.Draw(gameTime);
+            base.Draw(gameTime);
         }
 
         public Effect LoadShader(string path)

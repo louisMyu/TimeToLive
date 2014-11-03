@@ -65,11 +65,11 @@ namespace TimeToLive
             AllGameObjects = new List<GameObject>();
 
             m_SpawnTimers = new List<SpawnTimer>();
-            m_SpawnTimers.Add(new SpawnTimer(200, SpawnZombie, "Zombie"));
+            //m_SpawnTimers.Add(new SpawnTimer(20000, SpawnZombie, "Zombie"));
             //m_SpawnTimers.Add(new SpawnTimer(4000, SpawnFace, "Anubis"));
             //m_SpawnTimers.Add(new SpawnTimer(4000, SpawnShroom, "Shroom"));
             m_SpawnTimers.Add(new SpawnTimer(5500, MakeItem, "Item"));
-            //m_SpawnTimers.Add(new SpawnTimer(10000, MakeSlime, "Slime"));
+            m_SpawnTimers.Add(new SpawnTimer(10000, MakeSlime, "Slime"));
         }
 
         public static List<GameObject> GetCell(Vector2 position)
