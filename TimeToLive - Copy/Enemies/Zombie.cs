@@ -70,11 +70,11 @@ namespace TimeToLive
                 m_Origin.X = Width / 2;
                 m_Origin.Y = Height / 2;
             }
-            //_circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            //_circleBody.BodyType = BodyType.Dynamic;
-            //_circleBody.Mass = 5f;
-            //_circleBody.LinearDamping = 3f;
-            //_circleBody.Restitution = 1f;
+            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
+            _circleBody.BodyType = BodyType.Dynamic;
+            _circleBody.Mass = 5f;
+            _circleBody.LinearDamping = 3f;
+            _circleBody.Restitution = 1f;
             LoadExplodedParts();
         }
         public static void LoadTextures()
@@ -90,15 +90,15 @@ namespace TimeToLive
         public override void Move(Microsoft.Xna.Framework.Vector2 loc, TimeSpan elapsedTime)
         {
             //should really just use the Sim's position for everything instead of converting from one to another
-            //Vector2 simPosition = ConvertUnits.ToDisplayUnits(_circleBody.Position);
-            //if (float.IsNaN(simPosition.X) || float.IsNaN(simPosition.Y))
-            //{
-            //    return;
-            //}
-            //else
-            //{
-            //    this.Position = simPosition;
-            //}
+            Vector2 simPosition = ConvertUnits.ToDisplayUnits(_circleBody.Position);
+            if (float.IsNaN(simPosition.X) || float.IsNaN(simPosition.Y))
+            {
+                return;
+            }
+            else
+            {
+                this.Position = simPosition;
+            }
             switch (m_State)
             {
                 case MotionState.Wandering:
@@ -127,10 +127,10 @@ namespace TimeToLive
             //temp.X = MathHelper.Clamp(Position.X, Width + UI.OFFSET, Game1.GameWidth - (Width / 2));
             //temp.Y = MathHelper.Clamp(Position.Y, Height, Game1.GameHeight - (Height / 2));
             //Position = temp;
-            //if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
-            //{
-            //    _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
-            //}
+            if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
+            {
+                _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
+            }
 
             m_Bounds.X = (int)Position.X - Width / 2;
             m_Bounds.Y = (int)Position.Y - Height / 2;
@@ -147,13 +147,12 @@ namespace TimeToLive
             Move(vec, elapsedTime);
             ObjectManager.GetCell(Position).Add(this);
 
-            //bodyPosition = _circleBody.Position;
+            bodyPosition = _circleBody.Position;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Vector2 temp = ConvertUnits.ToDisplayUnits(_circleBody.Position);
-            //spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(_circleBody.Position), null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(m_Texture, Position, null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
+            Vector2 temp = ConvertUnits.ToDisplayUnits(_circleBody.Position);
+            spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(_circleBody.Position), null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
         }
         #region IEnemy
         public void CleanBody()
