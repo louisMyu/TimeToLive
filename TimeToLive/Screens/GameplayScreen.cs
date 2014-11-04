@@ -116,10 +116,10 @@ namespace TimeToLive
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
             GraphicsDevice device = ScreenManager.GraphicsDevice;
-            //device.SetRenderTarget(backgroundTexture);
-            //spriteBatch.Begin();
-            //UserInterface.DrawBackground(spriteBatch);
-            //spriteBatch.End();
+            device.SetRenderTarget(backgroundTexture);
+            spriteBatch.Begin();
+            UserInterface.DrawBackground(spriteBatch);
+            spriteBatch.End();
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -162,85 +162,80 @@ namespace TimeToLive
             if (IsActive || m_GameState == GameState.MainScreen)
             {
                 TimeSpan customElapsedTime = gameTime.ElapsedGameTime;
-                try
+                if (isPaused)
                 {
-                    if (isPaused)
-                    {
-                        return;
-                    }
-                    switch (m_GameState)
-                    {
-                        case GameState.MainScreen:
-                            if (!songPlaying)
-                            {
+                    return;
+                }
+                switch (m_GameState)
+                {
+                    case GameState.MainScreen:
+                        if (!songPlaying)
+                        {
 
-                            }
-                            //put some wandering enemies here
-                            break;
-                        case GameState.Countdown:
-                            if (!songPlaying)
-                            {
-                                songPlaying = true;
-                                MediaPlayer.Play(m_song);
-                                MediaPlayer.IsRepeating = true;
-                            }
-                            m_CountdownTime -= customElapsedTime;
-                            if (m_CountdownTime < TimeSpan.FromSeconds(1))
-                            {
-                                m_GameState = GameState.Playing;
-                            }
-                            UserInterface.Update(customElapsedTime);
-                            break;
-                        case GameState.Playing:
-                            //if (SlowMotion)
-                            //{
-                            //    customElapsedTime = new TimeSpan((long)(customElapsedTime.Ticks * 0.5));
-                            //}
-                            if (m_Player.TimeToDeath < TimeSpan.FromSeconds(0))
-                            {
-                                //SlowMotion = true;
-                                //ResetGame();
-                                m_Player.TimeToDeath = TimeSpan.FromTicks(0);
-                                UserInterface.SetTimeToDeath(m_Player.TimeToDeath);
-                                m_GameState = GameState.Dying;
-                                m_Player.SetPlayerToDyingState();
-                                return;
-                            }
-                            m_Player.TimeToDeath -= gameTime.ElapsedGameTime;
-                            // TODO: Add your update logic here
-                            UserInterface.ProcessInput(m_Player, TouchesCollected);
-                            UserInterface.Update(customElapsedTime);
+                        }
+                        //put some wandering enemies here
+                        break;
+                    case GameState.Countdown:
+                        if (!songPlaying)
+                        {
+                            songPlaying = true;
+                            MediaPlayer.Play(m_song);
+                            MediaPlayer.IsRepeating = true;
+                        }
+                        m_CountdownTime -= customElapsedTime;
+                        if (m_CountdownTime < TimeSpan.FromSeconds(1))
+                        {
+                            m_GameState = GameState.Playing;
+                        }
+                        UserInterface.Update(customElapsedTime);
+                        break;
+                    case GameState.Playing:
+                        //if (SlowMotion)
+                        //{
+                        //    customElapsedTime = new TimeSpan((long)(customElapsedTime.Ticks * 0.5));
+                        //}
+                        if (m_Player.TimeToDeath < TimeSpan.FromSeconds(0))
+                        {
+                            //SlowMotion = true;
+                            //ResetGame();
+                            m_Player.TimeToDeath = TimeSpan.FromTicks(0);
                             UserInterface.SetTimeToDeath(m_Player.TimeToDeath);
-                            //check if a game reset or zombie hit and save state and do the action here,
-                            //so that the game will draw the zombie intersecting the player
-                            foreach (GameObject g in ObjectManager.AllGameObjects)
-                            {
-                                g.Update(m_Player, customElapsedTime);
-                            }
-                            m_Player.Update(customElapsedTime);
-                            m_Player.CheckCollisions(m_World);
+                            m_GameState = GameState.Dying;
+                            m_Player.SetPlayerToDyingState();
+                            return;
+                        }
+                        m_Player.TimeToDeath -= gameTime.ElapsedGameTime;
+                        // TODO: Add your update logic here
+                        UserInterface.ProcessInput(m_Player, TouchesCollected);
+                        UserInterface.Update(customElapsedTime);
+                        UserInterface.SetTimeToDeath(m_Player.TimeToDeath);
+                        //check if a game reset or zombie hit and save state and do the action here,
+                        //so that the game will draw the zombie intersecting the player
+                        foreach (GameObject g in ObjectManager.AllGameObjects)
+                        {
+                            g.Update(m_Player, customElapsedTime);
+                        }
+                        m_Player.Update(customElapsedTime);
+                        m_Player.CheckCollisions(m_World);
 
-                            m_Player.CheckWeaponHits();
-                            //cleanup dead objects
-                            GlobalObjectManager.Update(customElapsedTime);
+                        m_Player.CheckWeaponHits();
+                        //cleanup dead objects
+                        GlobalObjectManager.Update(customElapsedTime);
 
-                            m_World.Step((float)1.0f / 60f);
-                            break;
-                        case GameState.Dying:
-                            if (m_Player.isDead)
-                            {
-                                MediaPlayer.Stop();
-                                PushDeathScreen();
-                                return;
-                            }
-                            m_Player.Update(customElapsedTime);
-                            break;
-                    }
-                    isUpdated = true;
+                        m_World.Step((float)1.0f / 60f);
+                        break;
+                    case GameState.Dying:
+                        if (m_Player.isDead)
+                        {
+                            MediaPlayer.Stop();
+                            PushDeathScreen();
+                            return;
+                        }
+                        m_Player.Update(customElapsedTime);
+                        break;
                 }
-                catch (Exception e)
-                {
-                }
+                isUpdated = true;
+
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
                 //GraphicsDevice device = ScreenManager.GraphicsDevice;
@@ -300,10 +295,10 @@ namespace TimeToLive
                     _spriteBatch.End();
                     if (UserInterface.TimeAlmostOut)
                     {
-                        //_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, 
-                        //                    UserInterface.m_SkullLeftEyePointLight, scale);
-                        //UserInterface.DrawSkullBackground(_spriteBatch);
-                        //_spriteBatch.End();
+                        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
+                                            UserInterface.m_SkullLeftEyePointLight, scale);
+                        UserInterface.DrawSkullBackground(_spriteBatch);
+                        _spriteBatch.End();
                     }
                     _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                                             null, scale);
