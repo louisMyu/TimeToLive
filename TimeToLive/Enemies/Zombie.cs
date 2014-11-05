@@ -156,6 +156,8 @@ namespace TimeToLive
         public void DoCollision(Player player)
         {
             ObjectManager.RemoveObject(this);
+            //this should cause an explosion
+
         }
         public void DropItem()
         {

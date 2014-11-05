@@ -114,7 +114,7 @@ namespace TimeToLive
                     }
                     if (ob.m_Bounds.Intersects(this.m_Bounds))
                     {
-                        if (ob is IEnemy && m_PlayerState != PlayerState.Damaged)
+                        if (ob is IEnemy)
                         {
                             IEnemy enemy = ob as IEnemy;
                             //get the amount of time that should be removed from the enemy and remove it from the player
@@ -126,8 +126,6 @@ namespace TimeToLive
                                 m_PlayerState = PlayerState.Dead;
                                 return;
                             }
-                            m_PlayerState = PlayerState.Damaged;
-                            DrawRedFlash = true;
                             continue;
                         }
                         if (ob is PowerUp)
