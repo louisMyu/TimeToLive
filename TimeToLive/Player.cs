@@ -99,7 +99,6 @@ namespace TimeToLive
         public void CheckCollisions(World _world)
         {
             //float nearestLength = float.MaxValue;
-            DrawRedFlash = false;
             List<List<GameObject>> objectsToCheck = ObjectManager.GetCellsOfRectangle(Bounds);
             foreach (List<GameObject> gameObjectList in objectsToCheck)
             {

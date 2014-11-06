@@ -103,6 +103,12 @@ namespace TimeToLive
 
             m_Direction = Vector2.Normalize(m_Direction);
             Vector2 amount = m_Direction * m_Speed;
+            if (CurrentKickbackAmount.LengthSquared() > 0)
+            {
+                amount += CurrentKickbackAmount;
+                CurrentKickbackAmount.X = 0;
+                CurrentKickbackAmount.Y = 0;
+            }
             base.Move(amount, elapsedTime);
 
             m_Bounds.X = (int)Position.X - Width / 2;
@@ -150,8 +156,10 @@ namespace TimeToLive
             ExplodedParts.Add(TextureBank.GetTexture("ZombieBody"));
             ExplodedParts.Add(TextureBank.GetTexture("ZombieHead"));
         }
+        private Vector2 CurrentKickbackAmount;
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
+            CurrentKickbackAmount = angle * amount;
         }
         public void DoCollision(Player player)
         {

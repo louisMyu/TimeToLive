@@ -87,6 +87,7 @@ namespace TimeToLive
         }
     }
 
+    #region Upgrade Menu Widget Tree shit
     //0_o
     public class WidgetTree
     {
@@ -234,4 +235,5 @@ namespace TimeToLive
     {
         void Draw(SpriteBatch sprite, Rectangle position);
     }
+#endregion
 }
