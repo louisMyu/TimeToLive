@@ -101,6 +101,7 @@ namespace TimeToLive
                     break;
             }
 
+
             m_Direction = Vector2.Normalize(m_Direction);
             Vector2 amount = m_Direction * m_Speed;
             if (CurrentKickbackAmount.LengthSquared() > 0)
