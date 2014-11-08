@@ -78,6 +78,7 @@ namespace TimeToLive
             TextureBank.GetTexture("ZombieBody");
             TextureBank.GetTexture("ZombieHead");
         }
+
         //moves a set amount per frame toward a certain location
         public override void Move(Microsoft.Xna.Framework.Vector2 loc, TimeSpan elapsedTime)
         {
