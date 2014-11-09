@@ -256,13 +256,7 @@ namespace TimeToLive
             // If we have a graphics device, tell the screen to load content.
             if (isInitialized)
             {
-                try
-                {
                     screen.LoadContent();
-                }
-                catch (Exception e)
-                {
-                }
             }
 
             screens.Add(screen);

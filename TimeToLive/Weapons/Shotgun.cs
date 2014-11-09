@@ -63,7 +63,7 @@ namespace TimeToLive
             {
                 m_BulletLines.Add(new Line());
             }
-            m_ShotgunDamage = 10;
+            m_ShotgunDamage = 5;
             //m_ShotgunDamage = WeaponStatistics.WeaponDamage;
         }
         //foreach line of the shotgun i need to update the lines based on the player center,
@@ -132,7 +132,7 @@ namespace TimeToLive
                             enemy.DropItem();
                             return true;
                         }
-                        enemy.ApplyLinearForce(intersectingAngle, Knockback);
+                        enemy.ApplyLinearForce(intersectingAngle, 20);
                     }
                 }
             }

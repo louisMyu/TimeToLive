@@ -42,7 +42,7 @@ namespace TimeToLive
         [DataMember]
         public MotionState State { get; set; }
 
-
+        private bool m_KnockedBack;
         public Zombie() : base()
         {
             LifeTotal = 40;
@@ -93,7 +93,6 @@ namespace TimeToLive
                         m_Direction.Y = (float)Math.Sin(RotationAngle);
                     }
                     break;
-
                 case MotionState.Locked:
                     m_Direction = loc;
                     RotationAngle = (float)Math.Atan2(loc.Y, loc.X);
@@ -102,14 +101,12 @@ namespace TimeToLive
                     break;
             }
 
-
             m_Direction = Vector2.Normalize(m_Direction);
             Vector2 amount = m_Direction * m_Speed;
-            if (CurrentKickbackAmount.LengthSquared() > 0)
+            if (m_KnockedBack)
             {
                 amount += CurrentKickbackAmount;
-                CurrentKickbackAmount.X = 0;
-                CurrentKickbackAmount.Y = 0;
+                m_KnockedBack = false;
             }
             base.Move(amount, elapsedTime);
 
@@ -162,6 +159,7 @@ namespace TimeToLive
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
             CurrentKickbackAmount = angle * amount;
+            m_KnockedBack = true;
         }
         public void DoCollision(Player player)
         {

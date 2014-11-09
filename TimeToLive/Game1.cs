@@ -93,14 +93,8 @@ namespace TimeToLive
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            try
-            {
-                m_ScreenManager.Update(gameTime);
-                base.Update(gameTime);
-            }
-            catch (Exception e)
-            {
-            }
+            m_ScreenManager.Update(gameTime);
+            base.Update(gameTime);
         }
 
         /// <summary>
