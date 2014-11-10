@@ -170,7 +170,6 @@ namespace TimeToLive
     {
         string[] animationNames;
         float[] animationTimes;
-        AnimationTimer timer;
 
         public Animation(string[] names, float[] times, EventHandler<AnimationTimerEventArgs> callback)
         {

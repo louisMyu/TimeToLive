@@ -13,12 +13,10 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using FarseerPhysics.Dynamics;
 using TimeToLive;
-using FarseerPhysics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Framework.Input;
 #endregion
 
 namespace TimeToLive
@@ -40,7 +38,6 @@ namespace TimeToLive
         #region Fields
 
         ContentManager content;
-        public static World m_World;
         public Player m_Player;
         public ObjectManager GlobalObjectManager;
         private UI UserInterface = new UI();
@@ -87,16 +84,13 @@ namespace TimeToLive
 
             //gameFont = content.Load<SpriteFont>("GSMgamefont");
 
-            m_World = new World(new Vector2(0, 0));
-            ConvertUnits.SetDisplayUnitToSimUnitRatio(5);
-
              Vector2 playerPosition = new Vector2(Game1.GameWidth / 2, Game1.GameHeight / 2);
             m_Player.Init(content, playerPosition);
 
             //init object manager and set objects for it
-            GlobalObjectManager.Init(m_Player, content, m_World);
+            GlobalObjectManager.Init(m_Player, content);
             SoundBank.SetContentManager(content);
-            m_Player.LoadContent(m_World);
+            m_Player.LoadContent();
             UserInterface.LoadContent(content, Game1.GameWidth, Game1.GameHeight);
             GlobalObjectManager.LoadContent();
 
@@ -125,8 +119,6 @@ namespace TimeToLive
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
             ScreenManager.Game.ResetElapsedTime();
-
-            m_World.Step(0f);
 
             isLoaded = true;
         }
@@ -216,13 +208,11 @@ namespace TimeToLive
                             g.Update(m_Player, customElapsedTime);
                         }
                         m_Player.Update(customElapsedTime);
-                        m_Player.CheckCollisions(m_World);
+                        m_Player.CheckCollisions();
 
                         m_Player.CheckWeaponHits();
                         //cleanup dead objects
                         GlobalObjectManager.Update(customElapsedTime);
-
-                        m_World.Step((float)1.0f / 60f);
                         break;
                     case GameState.Dying:
                         if (m_Player.isDead)

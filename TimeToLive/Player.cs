@@ -5,11 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using FarseerPhysics.Collision;
-using FarseerPhysics.Dynamics;
 using System.Runtime.Serialization;
-using FarseerPhysics.Factories;
-using FarseerPhysics;
 using Microsoft.Xna.Framework.Audio;
 
 namespace TimeToLive
@@ -64,7 +60,6 @@ namespace TimeToLive
             set;
         }
         public bool IsStopDown { get; set; }
-        public Body _circleBody;
 
         public Texture2D RedFlashTexture;
 
@@ -96,7 +91,7 @@ namespace TimeToLive
             DrawRedFlash = false;
         }
         //check collisions with things
-        public void CheckCollisions(World _world)
+        public void CheckCollisions()
         {
             //float nearestLength = float.MaxValue;
             List<List<GameObject>> objectsToCheck = ObjectManager.GetCellsOfRectangle(Bounds);
@@ -189,7 +184,7 @@ namespace TimeToLive
                 }
             }
         }
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             m_InitialPosition = Position;
             Texture = TextureBank.GetTexture("Player");
@@ -198,14 +193,7 @@ namespace TimeToLive
             {
                 w.LoadContent();
             }
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 4f;
-            _circleBody.LinearDamping = 2f;
-            if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
-            {
-                _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
-            }
+
             RedFlashTexture = TextureBank.GetTexture("RED");
         }
 
@@ -286,16 +274,7 @@ namespace TimeToLive
                     }
                     m_Moving = true;
                     ObjectManager.GetCell(Position).Remove(this);
-                    //should really just use the Sim's position for everything instead of converting from one to another
-                    Vector2 simPosition = ConvertUnits.ToDisplayUnits(_circleBody.Position);
-                    if (float.IsNaN(simPosition.X) || float.IsNaN(simPosition.Y))
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        this.Position = simPosition;
-                    }
+
 
                     if (!Input.UseAccelerometer)
                     {
@@ -343,11 +322,6 @@ namespace TimeToLive
                     if (m_Moving)
                     {
                         Move(m_MoveToward, elapsedTime);
-                    }
-
-                    if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
-                    {
-                        _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
                     }
                     ObjectManager.GetCell(Position).Add(this);
                     Vector2 playerVel = m_Moving ? m_MoveToward : new Vector2(0, 0);
@@ -406,7 +380,7 @@ namespace TimeToLive
         }
         public void ApplyLinearForce(Vector2 force)
         {
-            this._circleBody.ApplyLinearImpulse(force);
+
         }
 
         public void LoadWeapons()

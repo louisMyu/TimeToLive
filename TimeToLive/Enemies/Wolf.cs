@@ -1,6 +1,4 @@
-﻿using FarseerPhysics;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -30,9 +28,6 @@ namespace TimeToLive
         [DataMember]
         public float Speed { get { return m_Speed; } set { m_Speed = value; } }
 
-        [IgnoreDataMember]
-        public Body _circleBody;
-
         [DataMember]
         public int LifeTotal { get; set; }
 
@@ -50,7 +45,7 @@ namespace TimeToLive
         private const string m_MoveHandsString = "MoveHandsAnimation";
         private AnimationTimer MoveHandsTimer;
         private float[] moveHandsIntervals;
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             m_Direction = new Vector2(0, 0);
             m_Texture = TextureBank.GetTexture("WolfBody");
@@ -67,11 +62,6 @@ namespace TimeToLive
                 m_Origin.Y = Height / 2;
             }
 
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 5f;
-            _circleBody.LinearDamping = 3f;
-            _circleBody.Restitution = .5f;
 
             Lefthand = new WolfHand(WolfHand.LeftOrRightHand.Left, this);
             Righthand = new WolfHand(WolfHand.LeftOrRightHand.Right, this);
@@ -125,22 +115,11 @@ namespace TimeToLive
         {
 
             //should really just use the Sim's position for everything instead of converting from one to another
-            Vector2 simPosition = ConvertUnits.ToDisplayUnits(_circleBody.Position);
-            if (float.IsNaN(simPosition.X) || float.IsNaN(simPosition.Y))
-            {
-                return;
-            }
-            else
-            {
-                this.Position = simPosition;
-            }
+
             //get the wolf direction
             GetDirection();
             RotationAngle = (float)Math.Atan2(m_Direction.Y, m_Direction.X);
-            if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
-            {
-                _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
-            }
+
 
             m_Bounds.X = (int)Position.X - Width / 2;
             m_Bounds.Y = (int)Position.Y - Height / 2;
@@ -155,14 +134,13 @@ namespace TimeToLive
             Move(player.Position, elapsedTime);
             ObjectManager.GetCell(Position).Add(this);
 
-            bodyPosition = _circleBody.Position;
             Lefthand.Update(this);
             Righthand.Update(this);
             MoveHandsTimer.Update(elapsedTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(_circleBody.Position), null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(m_Texture, Position, null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
             Lefthand.Draw(spriteBatch);
             Righthand.Draw(spriteBatch);
         }
@@ -174,15 +152,12 @@ namespace TimeToLive
         #region IEnemy
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
+
         }
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
             Vector2 impulse = Vector2.Normalize(angle) * amount;
-            _circleBody.ApplyLinearImpulse(impulse);
+
         }
         public void AddToHealth(int amount)
         {
@@ -223,17 +198,13 @@ namespace TimeToLive
         public override void Save()
         {
         }
-        public override void Load(World world)
+        public override void Load()
         {
             if (m_Texture == null)
             {
                 m_Texture = TextureBank.GetTexture("WolfBody");
             }
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 0.2f;
-            _circleBody.LinearDamping = 2f;
-            _circleBody.Position = bodyPosition;
+
         }
         #endregion
         class WolfHand : GameObject, IEnemy

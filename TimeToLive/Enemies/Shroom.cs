@@ -1,7 +1,4 @@
-﻿using FarseerPhysics;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -37,9 +34,6 @@ namespace TimeToLive
         [DataMember]
         public float Speed { get { return m_Speed; } set { m_Speed = value; } }
 
-        [IgnoreDataMember]
-        public Body _circleBody;
-
         [DataMember]
         public int LifeTotal { get; set; }
 
@@ -67,7 +61,7 @@ namespace TimeToLive
             }
         }
 
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             m_Direction = new Vector2(0, 0);
             foreach (string s in m_BlinkingTextures)
@@ -88,12 +82,6 @@ namespace TimeToLive
                 m_Origin.X = Width / 2;
                 m_Origin.Y = Height / 2;
             }
-
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 5f;
-            _circleBody.LinearDamping = 3f;
-            _circleBody.Restitution = .5f;
             
             circleCenter = Position;
             circleCenter.Y += circleRadius;
@@ -112,15 +100,7 @@ namespace TimeToLive
         {
             circleTime += (float)elapsedTime.TotalMilliseconds;
             //should really just use the Sim's position for everything instead of converting from one to another
-            Vector2 simPosition = ConvertUnits.ToDisplayUnits(_circleBody.Position);
-            if (float.IsNaN(simPosition.X) || float.IsNaN(simPosition.Y))
-            {
-                return;
-            }
-            else
-            {
-                this.Position = simPosition;
-            }
+
             moveTime += (float)elapsedTime.TotalSeconds;
             if (backAndForth)
             {
@@ -142,10 +122,7 @@ namespace TimeToLive
             newPos.X = circleCenter.X + (float)Math.Sin(angle) * circleRadius;
             newPos.Y = circleCenter.Y + (float)Math.Cos(angle) * circleRadius;
             Position = newPos;
-            if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
-            {
-                _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
-            }
+
 
             m_Bounds.X = (int)Position.X - Width / 2;
             m_Bounds.Y = (int)Position.Y - Height / 2;
@@ -172,7 +149,6 @@ namespace TimeToLive
             }
             puffExplosion.Update(player, elapsedTime);
 
-            bodyPosition = _circleBody.Position;
             m_BlinkingTimer.Update(elapsedTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -196,15 +172,12 @@ namespace TimeToLive
         }
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
+
         }
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
             Vector2 impulse = Vector2.Normalize(angle) * amount;
-            _circleBody.ApplyLinearImpulse(impulse);
+
         }
         public void AddToHealth(int amount)
         {
@@ -237,17 +210,13 @@ namespace TimeToLive
         public override void Save()
         {
         }
-        public override void Load(World world)
+        public override void Load()
         {
             if (m_Texture == null)
             {
                 m_Texture = TextureBank.GetTexture("ShroomTexture");
             }
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 0.2f;
-            _circleBody.LinearDamping = 2f;
-            _circleBody.Position = bodyPosition;
+
         }
         #endregion
         class Puff : GameObject 

@@ -19,10 +19,6 @@ namespace TimeToLive
         {
             base.LoadContent();
         }
-        public override void Load(FarseerPhysics.Dynamics.World world)
-        {
-            Texture = TextureBank.GetTexture("Powerup");
-        }
         public PowerUp() { }
 
         public virtual SoundEffectInstance GetPickupSound()
@@ -47,10 +43,6 @@ namespace TimeToLive
         public override void LoadContent()
         {
             base.LoadContent();
-        }
-        public override void Load(FarseerPhysics.Dynamics.World world)
-        {
-            base.Load(world);
         }
         public CheatPowerUp() { }
         public CheatPowerUp(CheatTypes type)
@@ -125,10 +117,6 @@ namespace TimeToLive
             //need to set texture before calling base loadcontent to create collision bounds
             SetWeaponPowerUpTexture(Type);
             base.LoadContent();
-        }
-        public override void Load(FarseerPhysics.Dynamics.World world)
-        {
-            base.Load(world);
         }
         public WeaponPowerUp(WeaponType type)
         {

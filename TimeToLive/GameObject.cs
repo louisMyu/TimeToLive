@@ -1,7 +1,4 @@
-﻿using FarseerPhysics;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -16,12 +13,16 @@ namespace TimeToLive
     public class GameObject
     {
         protected static Random RANDOM_GENERATOR = new Random(69);
+
         [IgnoreDataMember]
         private Vector2 m_Position;
+
         [DataMember]
         public Vector2 Position { get { return m_Position; } set { m_Position = value; } }
+
         [IgnoreDataMember]
         public Texture2D Texture;
+
         [IgnoreDataMember]
         protected List<Texture2D> ExplodedParts = new List<Texture2D>();
         [DataMember]
@@ -64,6 +65,7 @@ namespace TimeToLive
             }
 
         }
+        
         public virtual void Init(float x, float y)
         {
             Position = new Vector2(x, y);
@@ -99,9 +101,6 @@ namespace TimeToLive
         public virtual void Save()
         {
         }
-        public virtual void Load(FarseerPhysics.Dynamics.World world)
-        {
-        }
         public virtual void CheckCollisions(GameObject obj)
         {
 
@@ -109,69 +108,50 @@ namespace TimeToLive
         protected virtual void LoadExplodedParts()
         {
         }
+        public virtual void Load()
+        {
+
+        }
     }
     public class ExplodedPart
     {
         static Random GibRandom = new Random();
         Texture2D m_Texture;
-        Body Body;
         Vector2 m_Origin;
         float RotationAngle;
+        Vector2 Position;
         public void LoadContent(Texture2D tex, Vector2 pos)
         {
             m_Texture = tex;
-            Body = BodyFactory.CreateBody(GameplayScreen.m_World, ConvertUnits.ToSimUnits(pos));
-            Fixture fixture = FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(35 / 2f), 1f, Body, null);
-            Body.BodyType = BodyType.Dynamic;
-            Body.Mass = 2.5f;
-            Body.LinearDamping = 2.5f;
-            Body.AngularDamping = 0.6f;
-            fixture.OnCollision += MyOnCollision;
+
             m_Origin = new Vector2(m_Texture.Width / 2, m_Texture.Height / 2);
             RotationAngle = (float)((GibRandom.Next(0, 301) / 300.0f) * Math.PI * 2);
-            Body.Rotation = RotationAngle;
-        }
-
-        public bool MyOnCollision(Fixture f1, Fixture f2,
-                                    FarseerPhysics.Dynamics.Contacts.Contact contact)
-        {
-            return false;
+            Position = new Vector2(0, 0);
         }
         public void Update(out bool hasStopped)
         {
             hasStopped = false;
-            RotationAngle = Body.Rotation;
-            Vector2 vel = Body.LinearVelocity;
-            if (vel.X == 0 && vel.Y == 0)
-            {
-                hasStopped = true;
-            }
         }
         public void Draw(SpriteBatch spriteBatch, Color c)
         {
-            spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(Body.Position), null, c, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(m_Texture, Position, null, c, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
         }
         public void DrawOffset(SpriteBatch spriteBatch, Color c)
         {
-            Vector2 temp = ConvertUnits.ToDisplayUnits(Body.Position);
+            Vector2 temp = Position;
             temp.X -= UI.OFFSET;
             spriteBatch.Draw(m_Texture, temp, null, c, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
         }
         public void ApplyLinearForce(Vector2 angle, float force)
         {
             Vector2 impulse = Vector2.Normalize(angle) * force;
-            Body.ApplyLinearImpulse(impulse);
         }
         public void ApplyTorque(float force)
         {
-            Body.ApplyTorque(force);
         }
         public void CleanBody()
         {
-            if (Body != null)
-            {
-                GameplayScreen.m_World.RemoveBody(Body);
-            }
+
         }
     }
 }

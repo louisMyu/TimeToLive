@@ -5,10 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using FarseerPhysics.Factories;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics;
 using System.Runtime.Serialization;
 
 namespace TimeToLive
@@ -48,7 +44,7 @@ namespace TimeToLive
             LifeTotal = 40;
             
         }
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             m_State = MotionState.Locked;
             RotationAngle = (float)GameObject.RANDOM_GENERATOR.NextDouble();

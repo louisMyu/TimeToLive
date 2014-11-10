@@ -1,5 +1,4 @@
-﻿using FarseerPhysics.Dynamics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -25,16 +24,14 @@ namespace TimeToLive
         public static bool face = false;
         public static Player m_Player;
         private ContentManager m_Content;
-        private World m_World;
         private PowerUp m_PowerUp;
 
         private List<SpawnTimer> m_SpawnTimers;
         private double GameTimer = 0;
-        public void Init(Player p, ContentManager content, World world)
+        public void Init(Player p, ContentManager content)
         {
             m_Player = p;
             m_Content = content;
-            m_World = world;
         }
 
         public void LoadContent()
@@ -48,7 +45,7 @@ namespace TimeToLive
             {
                 foreach (GameObject g in AllGameObjects)
                 {
-                    g.Load(m_World);
+                    g.LoadContent();
                 }
             }
             GameObjectGrid = new List<GameObject>[(Game1.GameWidth / GRID_DIVISIONS_X)+2][];
@@ -245,7 +242,7 @@ namespace TimeToLive
             Zombie z = new Zombie();
             Vector2 temp = new Vector2(x,y);
             z.Position = temp;
-            z.LoadContent(m_World);
+            z.LoadContent();
             AllGameObjects.Add(z);
         }
 
@@ -307,7 +304,7 @@ namespace TimeToLive
             temp.X = x;
             temp.Y = y;
             z.Position = temp;
-            z.LoadContent(m_World);
+            z.LoadContent();
             AllGameObjects.Add(z);
         }
         private void SpawnFace()
@@ -332,14 +329,14 @@ namespace TimeToLive
             temp.X = x;
             temp.Y = y;
             z.Position = temp;
-            z.LoadContent(m_World);
+            z.LoadContent();
             ObjectManager.AllGameObjects.Add(z);
         }
         private void SpawnWolf()
         {
             Wolf wolf = new Wolf();
             wolf.Position = new Vector2(m_Player.Position.X + 50, m_Player.Position.Y + 50);
-            wolf.LoadContent(m_World);
+            wolf.LoadContent();
             ObjectManager.AllGameObjects.Add(wolf);
         }
         private bool shroomSpawned = false;
@@ -349,7 +346,7 @@ namespace TimeToLive
             if (shroomSpawned) return;
             Shroom mushroom = new Shroom();
             mushroom.Position = new Vector2(m_Player.Position.X + 150, m_Player.Position.Y - 150);
-            mushroom.LoadContent(m_World);
+            mushroom.LoadContent();
             ObjectManager.AllGameObjects.Add(mushroom);
             shroomSpawned = true;
         }

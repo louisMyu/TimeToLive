@@ -1,7 +1,4 @@
-﻿using FarseerPhysics;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -36,9 +33,6 @@ namespace TimeToLive
         [DataMember]
         public float Speed { get { return m_Speed; } set { m_Speed = value; } }
 
-        [IgnoreDataMember]
-        public Body _circleBody;
-
         [DataMember]
         public int LifeTotal { get; set; }
 
@@ -54,7 +48,7 @@ namespace TimeToLive
 
         }
 
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             m_State = MotionState.Locked;
             RotationAngle = (float)GameObject.RANDOM_GENERATOR.NextDouble();
@@ -73,11 +67,7 @@ namespace TimeToLive
                 m_Origin.X = Width / 2;
                 m_Origin.Y = Height / 2;
             }
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 5f;
-            _circleBody.LinearDamping = 3f;
-            _circleBody.Restitution = .7f;
+
             LoadExplodedParts();
         }
         public static void LoadTextures()
@@ -92,15 +82,7 @@ namespace TimeToLive
         public override void Move(Microsoft.Xna.Framework.Vector2 loc, TimeSpan elapsedTime)
         {
             //should really just use the Sim's position for everything instead of converting from one to another
-            Vector2 simPosition = ConvertUnits.ToDisplayUnits(_circleBody.Position);
-            if (float.IsNaN(simPosition.X) || float.IsNaN(simPosition.Y))
-            {
-                return;
-            }
-            else
-            {
-                this.Position = simPosition;
-            }
+
 
             switch (m_State)
             {
@@ -115,13 +97,7 @@ namespace TimeToLive
             Vector2 amount = m_Direction * m_Speed;
             base.Move(amount, elapsedTime);
 
-            //Later on, remove the clamp to the edge and despawn when too far out of the screen.
-            //Position.X = MathHelper.Clamp(Position.X, Width + UI.OFFSET, Game1.GameWidth - (Width / 2));
-            //Position.Y = MathHelper.Clamp(Position.Y, Height, Game1.GameHeight - (Height / 2));
-            if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
-            {
-                _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
-            }
+
 
             m_Bounds.X = (int)Position.X - Width / 2;
             m_Bounds.Y = (int)Position.Y - Height / 2;
@@ -165,14 +141,13 @@ namespace TimeToLive
                 //for now it is just rotating the sprite itself
                 RotationAngle += (float)(2*Math.PI*0.02);
                 --m_FramesLeftAttacking;
-                Position = ConvertUnits.ToDisplayUnits(_circleBody.Position);
             }
             ObjectManager.GetCell(Position).Add(this);
-            bodyPosition = _circleBody.Position;
+
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(_circleBody.Position), null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(m_Texture, Position, null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
         }
         #region IEnemy
         public void DropItem()
@@ -185,10 +160,7 @@ namespace TimeToLive
         }
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
+
         }
         public List<Texture2D> GetExplodedParts()
         {
@@ -197,7 +169,6 @@ namespace TimeToLive
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
             Vector2 impulse = Vector2.Normalize(angle) * amount;
-            _circleBody.ApplyLinearImpulse(impulse);
         }
         public void AddToHealth(int amount)
         {

@@ -1,6 +1,4 @@
-﻿using FarseerPhysics;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -36,9 +34,6 @@ namespace TimeToLive
         [DataMember]
         public float Speed { get { return m_Speed; } set { m_Speed = value; } }
 
-        [IgnoreDataMember]
-        public Body _circleBody;
-
         [DataMember]
         public int LifeTotal { get; set; }
 
@@ -55,7 +50,7 @@ namespace TimeToLive
         }
 
         private static Texture2D m_SlimeTrailTex;
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             int dir = SlimeRandom.Next(4);
             m_Direction = new Vector2(0, 0);
@@ -91,11 +86,7 @@ namespace TimeToLive
             }
 
             m_SlimeTrail = new SlimeTrail(this);
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 5f;
-            _circleBody.LinearDamping = 3f;
-            _circleBody.Restitution = .5f;
+
             ObjectManager.SlimeTrails.Add(m_SlimeTrail);
         }
 
@@ -103,15 +94,6 @@ namespace TimeToLive
         public override void Move(Microsoft.Xna.Framework.Vector2 loc, TimeSpan elapsedTime)
         {
             //should really just use the Sim's position for everything instead of converting from one to another
-            Vector2 simPosition = ConvertUnits.ToDisplayUnits(_circleBody.Position);
-            if (float.IsNaN(simPosition.X) || float.IsNaN(simPosition.Y))
-            {
-                return;
-            }
-            else
-            {
-                this.Position = simPosition;
-            }
 
             GetDirection();
             RotationAngle = (float)Math.Atan2(m_Direction.Y, m_Direction.X);
@@ -121,10 +103,6 @@ namespace TimeToLive
             temp.X = MathHelper.Clamp(Position.X, 0 + UI.OFFSET, Game1.GameWidth - Width / 2);
             temp.Y = MathHelper.Clamp(Position.Y, 0, Game1.GameHeight - Height / 2);
             Position = temp;
-            if (!float.IsNaN(this.Position.X) && !float.IsNaN(this.Position.Y))
-            {
-                _circleBody.Position = ConvertUnits.ToSimUnits(this.Position);
-            }
 
             m_Bounds.X = (int)Position.X - Width / 2;
             m_Bounds.Y = (int)Position.Y - Height / 2;
@@ -169,12 +147,12 @@ namespace TimeToLive
                 AddSlimePiece();
                 m_SlimeTrailTimeCounter = 0;
             }
-            bodyPosition = _circleBody.Position;
+
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
 
-            spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(_circleBody.Position), null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(m_Texture, Position, null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
         }
         private void AddSlimePiece()
         {
@@ -195,17 +173,9 @@ namespace TimeToLive
             //TODO load slime exploded textures here
         }
         #region IEnemy
-        public void CleanBody()
-        {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
-        }
+
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
-            Vector2 impulse = Vector2.Normalize(angle) * amount;
-            _circleBody.ApplyLinearImpulse(impulse);
         }
         public void AddToHealth(int amount)
         {
@@ -240,6 +210,10 @@ namespace TimeToLive
             p.LoadContent();
             ObjectManager.PowerUpItems.Add(p);
             ObjectManager.GetCell(p.Position).Add(p);
+        }
+        public void CleanBody()
+        {
+
         }
         #endregion
 

@@ -128,7 +128,7 @@ namespace TimeToLive
                         enemy.AddToHealth(-m_ShotgunDamage);
                         if (enemy.GetHealth() <= 0)
                         {
-                            ExplodeEnemy(intersectingAngle, enemy, ob.Position);
+                            //ExplodeEnemy(intersectingAngle, enemy, ob.Position);
                             enemy.DropItem();
                             return true;
                         }
