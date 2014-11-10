@@ -228,7 +228,6 @@ namespace TimeToLive
         /// </summary>
         public void Draw(GameTime gameTime)
         {
-            GraphicsDevice.SetRenderTarget(null);
             
             foreach (GameScreen screen in screens)
             {

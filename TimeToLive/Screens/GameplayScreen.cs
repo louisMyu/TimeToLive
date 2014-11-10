@@ -255,20 +255,21 @@ namespace TimeToLive
             TouchesCollected = input.TouchState;
         }
 
-        public bool BackgroundDrawn;
         /// <summary>
         /// Draws the gameplay screen.
         /// </summary>
         public override void Draw(GameTime gameTime, Matrix scale)
         {
             SpriteBatch _spriteBatch = ScreenManager.SpriteBatch;
-            if (!BackgroundDrawn)
-            {
-                ScreenManager.GraphicsDevice.SetRenderTarget(backgroundTexture);
-                _spriteBatch.Begin();
-                UserInterface.DrawBackground(_spriteBatch);
-                _spriteBatch.End();
-            }
+
+            ScreenManager.GraphicsDevice.SetRenderTarget(backgroundTexture);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
+                        null, scale);
+            UserInterface.DrawBackground(_spriteBatch);
+            UserInterface.DrawBakedGibs(_spriteBatch);
+            _spriteBatch.End();
+
+            ScreenManager.GraphicsDevice.SetRenderTarget(null);
             //make sure the game has loaded and has updated at least one frame
             if (!isLoaded || !isUpdated)
             {
