@@ -111,15 +111,7 @@ namespace TimeToLive
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             backgroundTexture = new RenderTarget2D(ScreenManager.GraphicsDevice, (int)ScreenManager.NativeResolution.X, (int)ScreenManager.NativeResolution.Y, false,
                                             SurfaceFormat.Color, DepthFormat.None, ScreenManager.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.PreserveContents);
-            
 
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-
-            GraphicsDevice device = ScreenManager.GraphicsDevice;
-            device.SetRenderTarget(backgroundTexture);
-            spriteBatch.Begin();
-            UserInterface.DrawBackground(spriteBatch);
-            spriteBatch.End();
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -236,15 +228,6 @@ namespace TimeToLive
                 }
                 isUpdated = true;
 
-                SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-
-                //GraphicsDevice device = ScreenManager.GraphicsDevice;
-                //device.SetRenderTarget(backgroundTexture);
-                //spriteBatch.Begin();
-                //UserInterface.DrawBakedGibs(spriteBatch);
-                //spriteBatch.End();
-                // TODO: this game isn't very fun! You could probably improve
-                // it by inserting something more interesting in this space :-)
             }
         }
         private void ResetGame()
@@ -273,18 +256,25 @@ namespace TimeToLive
             TouchesCollected = input.TouchState;
         }
 
-
+        private bool m_BackgroundDrawn;
         /// <summary>
         /// Draws the gameplay screen.
         /// </summary>
         public override void Draw(GameTime gameTime, Matrix scale)
         {
+            SpriteBatch _spriteBatch = ScreenManager.SpriteBatch;
+            ScreenManager.GraphicsDevice.SetRenderTarget(backgroundTexture);
+            _spriteBatch.Begin();
+            UserInterface.DrawBackground(_spriteBatch);
+            //UserInterface.DrawBakedGibs(_spriteBatch);
+            _spriteBatch.End();
+            ScreenManager.GraphicsDevice.SetRenderTarget(null);
             //make sure the game has loaded and has updated at least one frame
             if (!isLoaded || !isUpdated)
             {
                 return;
             }
-            SpriteBatch _spriteBatch = ScreenManager.SpriteBatch;
+            
             switch (m_GameState)
             {
                 case GameState.Dying:
