@@ -176,6 +176,7 @@ namespace TimeToLive
             // Loop as long as there are screens waiting to be updated.
             while (screensToUpdate.Count > 0)
             {
+
                 // Pop the topmost screen off the waiting list.
                 GameScreen screen = screensToUpdate[screensToUpdate.Count - 1];
 
