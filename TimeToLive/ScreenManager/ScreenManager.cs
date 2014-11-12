@@ -192,7 +192,6 @@ namespace TimeToLive
                     // give it a chance to handle input.
                     if (!otherScreenHasFocus)
                     {
-
                         screen.HandleInput(input);
 
                         otherScreenHasFocus = true;
