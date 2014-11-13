@@ -193,7 +193,6 @@ namespace TimeToLive
                     if (!otherScreenHasFocus)
                     {
                         screen.HandleInput(input);
-
                         otherScreenHasFocus = true;
                     }
 
