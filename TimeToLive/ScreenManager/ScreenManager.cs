@@ -160,6 +160,7 @@ namespace TimeToLive
         /// </summary>
         public void Update(GameTime gameTime)
         {
+
             // Read the keyboard and gamepad.
             input.Update();
 
