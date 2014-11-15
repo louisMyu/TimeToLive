@@ -39,6 +39,8 @@ namespace TimeToLive
         public MotionState State { get; set; }
 
         private bool m_KnockedBack;
+
+        
         public Zombie() : base()
         {
             LifeTotal = 40;
@@ -73,6 +75,8 @@ namespace TimeToLive
             }
             TextureBank.GetTexture("ZombieBody");
             TextureBank.GetTexture("ZombieHead");
+            TextureBank.GetTexture("ZBoom01");
+            TextureBank.GetTexture("ZBoom02");
         }
 
         //moves a set amount per frame toward a certain location
@@ -161,6 +165,7 @@ namespace TimeToLive
         {
             ObjectManager.RemoveObject(this);
             //this should cause an explosion
+
 
         }
         public void DropItem()
