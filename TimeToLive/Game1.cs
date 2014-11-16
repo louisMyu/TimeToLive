@@ -19,6 +19,7 @@ namespace TimeToLive
 
         public Game1()
         {
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             m_ScreenManager = new ScreenManager(this);
