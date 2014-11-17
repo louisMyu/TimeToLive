@@ -16,7 +16,6 @@ namespace TimeToLive
         public static int GameWidth;
         public static int GameHeight;
         private ScreenManager m_ScreenManager;
-
         public Game1()
         {
 
