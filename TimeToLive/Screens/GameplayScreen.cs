@@ -19,6 +19,7 @@ using TimeToLive;
 using FarseerPhysics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
+using System.Collections.Generic;
 #endregion
 
 namespace TimeToLive
@@ -38,7 +39,7 @@ namespace TimeToLive
             MainScreen
         }
         #region Fields
-
+        
         ContentManager content;
         public static World m_World;
         public Player m_Player;
@@ -57,7 +58,10 @@ namespace TimeToLive
         RenderTarget2D backgroundTexture;
 
         #endregion
-
+        #region Physics Bodies
+        private const int MAX_PHYSICS_BODIES = 100;
+        private static Stack<Body> m_PhysicsBodies;
+        #endregion
         #region Initialization
 
 
@@ -113,6 +117,12 @@ namespace TimeToLive
                                             SurfaceFormat.Color, DepthFormat.None, ScreenManager.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.PreserveContents);
 
 
+            //load physics bodies
+            m_PhysicsBodies = new Stack<Body>();
+            for (int i = 0; i < MAX_PHYSICS_BODIES; ++i)
+            {
+                m_PhysicsBodies.Push(new Body(world));
+            }
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.

@@ -76,6 +76,7 @@ namespace TimeToLive
             _circleBody.Mass = 5f;
             _circleBody.LinearDamping = 3f;
             _circleBody.Restitution = 1f;
+            
         }
         public static void LoadTextures()
         {
