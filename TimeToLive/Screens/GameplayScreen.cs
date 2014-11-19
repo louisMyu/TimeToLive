@@ -58,10 +58,7 @@ namespace TimeToLive
         RenderTarget2D backgroundTexture;
 
         #endregion
-        #region Physics Bodies
-        private const int MAX_PHYSICS_BODIES = 100;
-        private static Stack<Body> m_PhysicsBodies;
-        #endregion
+
         #region Initialization
 
 
@@ -116,13 +113,6 @@ namespace TimeToLive
             backgroundTexture = new RenderTarget2D(ScreenManager.GraphicsDevice, (int)ScreenManager.NativeResolution.X, (int)ScreenManager.NativeResolution.Y, false,
                                             SurfaceFormat.Color, DepthFormat.None, ScreenManager.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.PreserveContents);
 
-
-            //load physics bodies
-            m_PhysicsBodies = new Stack<Body>();
-            for (int i = 0; i < MAX_PHYSICS_BODIES; ++i)
-            {
-                m_PhysicsBodies.Push(new Body(world));
-            }
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
