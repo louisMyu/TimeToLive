@@ -6,11 +6,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace TimeToLive
 {
     public abstract class Cheat
     {
+        
         protected int m_Duration = 0;
         public abstract void StartEffect(Player p);
         public abstract void EndEffect(Player p);
