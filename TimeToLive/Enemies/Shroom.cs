@@ -45,8 +45,8 @@ namespace TimeToLive
 
         [DataMember]
         public MotionState State { get; set; }
-        public Shroom()
-            : base()
+        public Shroom(PhysicsManager manager)
+            : base(manager)
         {
             LifeTotal = 40;
             m_BlinkingIntervals[0] = 2500;
@@ -98,7 +98,7 @@ namespace TimeToLive
             circleCenter = Position;
             circleCenter.Y += circleRadius;
 
-            puffExplosion = new Puff();
+            puffExplosion = new Puff(m_PhysicsManager);
         }
 
         private Puff puffExplosion;
@@ -188,7 +188,7 @@ namespace TimeToLive
         #region IEnemy
         public void DropItem()
         {
-            PowerUp p = new WeaponPowerUp(WeaponPowerUp.WeaponType.Rifle);
+            PowerUp p = new WeaponPowerUp(WeaponPowerUp.WeaponType.Rifle, m_PhysicsManager);
             p.Position = Position;
             p.LoadContent();
             ObjectManager.PowerUpItems.Add(p);
@@ -196,10 +196,7 @@ namespace TimeToLive
         }
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
+            m_PhysicsManager.ReturnBody(_circleBody);
         }
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
@@ -233,23 +230,8 @@ namespace TimeToLive
             ObjectManager.RemoveObject(this);
         }
         #endregion
-        #region Save/Load
-        public override void Save()
-        {
-        }
-        public override void Load(World world)
-        {
-            if (m_Texture == null)
-            {
-                m_Texture = TextureBank.GetTexture("ShroomTexture");
-            }
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 0.2f;
-            _circleBody.LinearDamping = 2f;
-            _circleBody.Position = bodyPosition;
-        }
-        #endregion
+
+
         class Puff : GameObject 
         {
             const string m_AnimationName = "PuffAnimation";
@@ -265,7 +247,8 @@ namespace TimeToLive
                 Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
             }
 
-            public Puff() : base()
+            public Puff(PhysicsManager manager)
+                : base(manager)
             {
                 textures = new string[12];
                 intervals = new float[12];

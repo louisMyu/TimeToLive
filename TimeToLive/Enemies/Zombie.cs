@@ -43,14 +43,12 @@ namespace TimeToLive
         public MotionState State { get; set; }
 
         private bool m_KnockedBack;
-
         public Body _circleBody;
-        public Zombie() : base()
+        public Zombie(PhysicsManager manager) : base(manager)
         {
             LifeTotal = 40;
-            
         }
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             m_State = MotionState.Locked;
             RotationAngle = (float)GameObject.RANDOM_GENERATOR.NextDouble();
@@ -70,13 +68,12 @@ namespace TimeToLive
                 m_Origin.Y = Height / 2;
             }
             LoadExplodedParts();
-
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
+            Fixture fixture;
+            _circleBody = m_PhysicsManager.GetBody(ConvertUnits.ToSimUnits(35 / 2f), 0.5f, ConvertUnits.ToSimUnits(Position), out fixture);
             _circleBody.BodyType = BodyType.Dynamic;
             _circleBody.Mass = 5f;
             _circleBody.LinearDamping = 3f;
             _circleBody.Restitution = 1f;
-            
         }
         public static void LoadTextures()
         {
@@ -162,11 +159,8 @@ namespace TimeToLive
         #region IEnemy
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-
-            }
+            m_PhysicsManager.ReturnBody(_circleBody);
+            _circleBody = null;
         }
         public void AddToHealth(int amount)
         {
@@ -193,11 +187,11 @@ namespace TimeToLive
         private Vector2 CurrentKickbackAmount;
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
-            CurrentKickbackAmount = angle * amount;
-            m_KnockedBack = true;
-
             Vector2 impulse = Vector2.Normalize(angle) * amount;
-            _circleBody.ApplyLinearImpulse(impulse);
+            if (_circleBody != null)
+            {
+                _circleBody.ApplyLinearImpulse(impulse);
+            }
         }
         public void DoCollision(Player player)
         {
@@ -207,11 +201,11 @@ namespace TimeToLive
         }
         public void DropItem()
         {
-            PowerUp p = new WeaponPowerUp(WeaponPowerUp.WeaponType.Plasma);
-            p.Position = Position;
-            p.LoadContent();
-            ObjectManager.PowerUpItems.Add(p);
-            ObjectManager.GetCell(p.Position).Add(p);
+            //PowerUp p = new WeaponPowerUp(WeaponPowerUp.WeaponType.Plasma, m_PhysicsManager);
+            //p.Position = Position;
+            //p.LoadContent();
+            //ObjectManager.PowerUpItems.Add(p);
+            //ObjectManager.GetCell(p.Position).Add(p);
         }
         #endregion
         #region Save/Load

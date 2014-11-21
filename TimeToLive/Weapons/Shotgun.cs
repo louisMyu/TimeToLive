@@ -68,9 +68,9 @@ namespace TimeToLive
         }
         //foreach line of the shotgun i need to update the lines based on the player center,
         //and rotate it and give it length, then update the graphical lines
-        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, TimeSpan elapsedTime)
+        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, PhysicsManager manager, TimeSpan elapsedTime)
         {
-            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, elapsedTime);
+            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, manager, elapsedTime);
             if (!Firing)
             {
                 float accuracyInRadians = WEAPON_RANDOM.Next(0, accuracy) * ((float)Math.PI / 180);
@@ -109,7 +109,7 @@ namespace TimeToLive
             }
         }
         //returns true if enemy died
-        public override bool CheckCollision(GameObject ob)
+        public override bool CheckCollision(GameObject ob, PhysicsManager manager)
         {
             if (!CanDamage)
             {
@@ -128,11 +128,11 @@ namespace TimeToLive
                         enemy.AddToHealth(-m_ShotgunDamage);
                         if (enemy.GetHealth() <= 0)
                         {
-                            ExplodeEnemy(intersectingAngle, enemy, ob.Position);
+                            ExplodeEnemy(intersectingAngle, enemy, ob.Position, manager);
                             enemy.DropItem();
                             return true;
                         }
-                        enemy.ApplyLinearForce(intersectingAngle, 20);
+                        enemy.ApplyLinearForce(intersectingAngle, 200);
                     }
                 }
             }
@@ -191,7 +191,7 @@ namespace TimeToLive
             array[3] = new AnimationInfo(TextureBank.GetTexture(blast4String), -1);
             m_FireAnimation = new AnimationManager(array, m_SavedShotInfo, 15);
         }
-        public override void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos)
+        public override void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos, PhysicsManager manager)
         {
             List<Texture2D> gibTextures = enemy.GetExplodedParts();
             for (int i = 0; i < gibTextures.Count; ++i)
@@ -200,7 +200,7 @@ namespace TimeToLive
                 float randomDegree = -45f + (90f * (float)Weapon.WEAPON_RANDOM.NextDouble());
                 float randomForce = Knockback + (1500f * (float)Weapon.WEAPON_RANDOM.NextDouble());
                 ExplodedPart gib = new ExplodedPart();
-                gib.LoadContent(gibTextures[i], pos);
+                gib.LoadContent(gibTextures[i], pos, manager);
                 //so we dont divide by zero
                 if (intersectingAngle.X == 0) intersectingAngle.X += 0.000001f;
                 float originalDegrees = (float)Math.Atan2(intersectingAngle.Y, intersectingAngle.X);

@@ -38,8 +38,8 @@ namespace TimeToLive
 
         [DataMember]
         public MotionState State { get; set; }
-        public Wolf()
-            : base()
+        public Wolf(PhysicsManager manager)
+            : base(manager)
         {
             LifeTotal = 40;
 
@@ -73,8 +73,8 @@ namespace TimeToLive
             _circleBody.LinearDamping = 3f;
             _circleBody.Restitution = .5f;
 
-            Lefthand = new WolfHand(WolfHand.LeftOrRightHand.Left, this);
-            Righthand = new WolfHand(WolfHand.LeftOrRightHand.Right, this);
+            Lefthand = new WolfHand(WolfHand.LeftOrRightHand.Left, this, m_PhysicsManager);
+            Righthand = new WolfHand(WolfHand.LeftOrRightHand.Right, this, m_PhysicsManager);
             Lefthand.LoadContent();
             Righthand.LoadContent();
 
@@ -174,10 +174,7 @@ namespace TimeToLive
         #region IEnemy
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
+            m_PhysicsManager.ReturnBody(_circleBody);
         }
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
@@ -212,30 +209,15 @@ namespace TimeToLive
         }
         public void DropItem()
         {
-            PowerUp p = new WeaponPowerUp(WeaponPowerUp.WeaponType.Repeater);
+            PowerUp p = new WeaponPowerUp(WeaponPowerUp.WeaponType.Repeater, m_PhysicsManager);
             p.Position = Position;
             p.LoadContent();
             ObjectManager.PowerUpItems.Add(p);
             ObjectManager.GetCell(p.Position).Add(p);
         }
         #endregion
-        #region Save/Load
-        public override void Save()
-        {
-        }
-        public override void Load(World world)
-        {
-            if (m_Texture == null)
-            {
-                m_Texture = TextureBank.GetTexture("WolfBody");
-            }
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
-            _circleBody.BodyType = BodyType.Dynamic;
-            _circleBody.Mass = 0.2f;
-            _circleBody.LinearDamping = 2f;
-            _circleBody.Position = bodyPosition;
-        }
-        #endregion
+
+
         class WolfHand : GameObject, IEnemy
         {
             private TimeSpan DAMAGE_AMOUNT = TimeSpan.FromSeconds(5);
@@ -247,7 +229,7 @@ namespace TimeToLive
                 Right
             }
             private LeftOrRightHand WhichHand;
-            public WolfHand(LeftOrRightHand which, Wolf body)
+            public WolfHand(LeftOrRightHand which, Wolf body, PhysicsManager manager) : base(manager)
             {
                 if (which == LeftOrRightHand.Left)
                 {

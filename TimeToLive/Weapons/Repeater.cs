@@ -39,9 +39,9 @@ namespace TimeToLive
         }
         //foreach line of the shotgun i need to update the lines based on the player center,
         //and rotate it and give it length, then update the graphical lines
-        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, TimeSpan elapsedTime)
+        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, PhysicsManager manager, TimeSpan elapsedTime)
         {
-            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, elapsedTime);
+            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, manager, elapsedTime);
             //float accuracyInRadians = WEAPON_RANDOM.Next(0, accuracy) * ((float)Math.PI / 180);
             //TODO: add a random so its either plus or minus accuracy
             float centerVector = rotationAngle;
@@ -56,7 +56,7 @@ namespace TimeToLive
             //firing a shot, save the state
             if (shotFired && CanFire())
             {
-                Bullet temp = new Bullet(m_CurrentShotInfo, 40);
+                Bullet temp = new Bullet(m_CurrentShotInfo, 40, manager);
                 temp.LoadContent();
                 m_Bullets.Add(temp);
                 m_ElapsedFrames = FireRate;
@@ -79,7 +79,7 @@ namespace TimeToLive
             }
         }
         //returns true if enemy died
-        public override bool CheckCollision(GameObject ob)
+        public override bool CheckCollision(GameObject ob, PhysicsManager manager)
         {
             bool hit = false;
 
@@ -139,7 +139,7 @@ namespace TimeToLive
         protected override void LoadTextures()
         {
         }
-        public override void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos)
+        public override void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos, PhysicsManager manager)
         {
             List<Texture2D> gibTextures = enemy.GetExplodedParts();
             float shotgunSpreadAngle = 60;
@@ -150,7 +150,7 @@ namespace TimeToLive
             for (int i = 0; i < gibTextures.Count; ++i)
             {
                 ExplodedPart gib = new ExplodedPart();
-                gib.LoadContent(gibTextures[i], pos);
+                gib.LoadContent(gibTextures[i], pos, manager);
                 Vector2 halfAngle = Utilities.RadiansToVector2(Utilities.DegreesToRadians(-30));
                 gib.ApplyLinearForce(intersectingAngle - (halfAngle) + (i * 2 * halfAngle), Knockback * 1.5f);
                 //shoul be randomixed

@@ -47,8 +47,8 @@ namespace TimeToLive
         public MotionState State { get; set; }
 
 
-        public Anubis()
-            : base()
+        public Anubis(PhysicsManager manager)
+            : base(manager)
         {
             LifeTotal = 80;
 
@@ -177,7 +177,7 @@ namespace TimeToLive
         #region IEnemy
         public void DropItem()
         {
-            PowerUp p = new CheatPowerUp(CheatPowerUp.CheatTypes.Wrath);
+            PowerUp p = new CheatPowerUp(CheatPowerUp.CheatTypes.Wrath, m_PhysicsManager);
             p.Position = Position;
             p.LoadContent();
             ObjectManager.PowerUpItems.Add(p);
@@ -185,10 +185,7 @@ namespace TimeToLive
         }
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
+            m_PhysicsManager.ReturnBody(_circleBody);
         }
         public List<Texture2D> GetExplodedParts()
         {

@@ -173,12 +173,12 @@ namespace TimeToLive
                 part.Draw(spriteBatch, BackGroundHueColor);
             }
         }
-        public void DrawBakedGibs(SpriteBatch spriteBatch)
+        public void DrawBakedGibs(SpriteBatch spriteBatch, PhysicsManager manager)
         {
             foreach (ExplodedPart part in BakedGibs)
             {
                 part.DrawOffset(spriteBatch, BackGroundHueColor);
-                part.CleanBody();
+                part.CleanBody(manager);
             }
             BakedGibs.Clear();
         }

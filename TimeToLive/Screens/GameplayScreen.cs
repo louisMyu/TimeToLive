@@ -41,7 +41,7 @@ namespace TimeToLive
         #region Fields
         
         ContentManager content;
-        public static World m_World;
+        private PhysicsManager m_PhysicsManager;
         public Player m_Player;
         public ObjectManager GlobalObjectManager;
         private UI UserInterface = new UI();
@@ -69,7 +69,6 @@ namespace TimeToLive
         {
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
-            m_Player = new Player();
             GlobalObjectManager = new ObjectManager();
             isLoaded = false;
             isUpdated = false;
@@ -88,16 +87,18 @@ namespace TimeToLive
 
             //gameFont = content.Load<SpriteFont>("GSMgamefont");
 
-            m_World = new World(new Vector2(0, 0));
+            m_PhysicsManager = new PhysicsManager();
+            m_PhysicsManager.Init();
             ConvertUnits.SetDisplayUnitToSimUnitRatio(5);
 
              Vector2 playerPosition = new Vector2(Game1.GameWidth / 2, Game1.GameHeight / 2);
+             m_Player = new Player(m_PhysicsManager);
             m_Player.Init(content, playerPosition);
 
             //init object manager and set objects for it
-            GlobalObjectManager.Init(m_Player, content, m_World);
+            GlobalObjectManager.Init(m_Player, content, m_PhysicsManager);
             SoundBank.SetContentManager(content);
-            m_Player.LoadContent(m_World);
+            m_Player.LoadContent(m_PhysicsManager);
             UserInterface.LoadContent(content, Game1.GameWidth, Game1.GameHeight);
             GlobalObjectManager.LoadContent();
 
@@ -118,7 +119,7 @@ namespace TimeToLive
             // it should not try to catch up.
             ScreenManager.Game.ResetElapsedTime();
 
-            m_World.Step(0f);
+            m_PhysicsManager.Update(0f);
 
             isLoaded = true;
         }
@@ -208,13 +209,13 @@ namespace TimeToLive
                             g.Update(m_Player, customElapsedTime);
                         }
                         m_Player.Update(customElapsedTime);
-                        m_Player.CheckCollisions(m_World);
+                        m_Player.CheckCollisions();
 
                         m_Player.CheckWeaponHits();
                         //cleanup dead objects
                         GlobalObjectManager.Update(customElapsedTime);
 
-                        m_World.Step((float)1.0f / 60f);
+                        m_PhysicsManager.Update((float)1.0f / 60f);
                         break;
                     case GameState.Dying:
                         if (m_Player.isDead)

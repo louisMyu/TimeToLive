@@ -15,6 +15,7 @@ namespace TimeToLive
     [DataContract]
     public class GameObject
     {
+        protected PhysicsManager m_PhysicsManager;
         protected static Random RANDOM_GENERATOR = new Random(69);
         [IgnoreDataMember]
         private Vector2 m_Position;
@@ -56,13 +57,13 @@ namespace TimeToLive
                 
         }
         public bool CanDelete = false;
-        public GameObject()
+        public GameObject(PhysicsManager manager)
         {
             if (m_Bounds == null)
             {
                 m_Bounds = new Rectangle();
             }
-
+            m_PhysicsManager = manager;
         }
         public virtual void Init(float x, float y)
         {
@@ -99,9 +100,7 @@ namespace TimeToLive
         public virtual void Save()
         {
         }
-        public virtual void Load(FarseerPhysics.Dynamics.World world)
-        {
-        }
+
         public virtual void CheckCollisions(GameObject obj)
         {
 
@@ -117,11 +116,11 @@ namespace TimeToLive
         Body Body;
         Vector2 m_Origin;
         float RotationAngle;
-        public void LoadContent(Texture2D tex, Vector2 pos)
+        public void LoadContent(Texture2D tex, Vector2 pos, PhysicsManager physics)
         {
             m_Texture = tex;
-            Body = BodyFactory.CreateBody(GameplayScreen.m_World, ConvertUnits.ToSimUnits(pos));
-            Fixture fixture = FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(35 / 2f), 1f, Body, null);
+            Fixture fixture;
+            Body = physics.GetBody(ConvertUnits.ToSimUnits(tex.Height/2), 1f, pos, out fixture);
             Body.BodyType = BodyType.Dynamic;
             Body.Mass = 2.5f;
             Body.LinearDamping = 2.5f;
@@ -166,12 +165,10 @@ namespace TimeToLive
         {
             Body.ApplyTorque(force);
         }
-        public void CleanBody()
+        public void CleanBody(PhysicsManager manager)
         {
-            if (Body != null)
-            {
-                GameplayScreen.m_World.RemoveBody(Body);
-            }
+            manager.ReturnBody(Body);
+            Body = null;
         }
     }
 }

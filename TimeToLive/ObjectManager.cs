@@ -25,32 +25,20 @@ namespace TimeToLive
         public static bool face = false;
         public static Player m_Player;
         private ContentManager m_Content;
-        private World m_World;
+        private PhysicsManager m_PhysicManager;
         private PowerUp m_PowerUp;
 
         private List<SpawnTimer> m_SpawnTimers;
         private double GameTimer = 0;
-        public void Init(Player p, ContentManager content, World world)
+        public void Init(Player p, ContentManager content, PhysicsManager physManager)
         {
             m_Player = p;
             m_Content = content;
-            m_World = world;
+            m_PhysicManager = physManager;
         }
 
         public void LoadContent()
         {
-            //AllGameObjects = Storage.Load<List<GameObject>>("GameObjects", "ObjectList.dat");
-            if (AllGameObjects == null)
-            {
-                AllGameObjects = new List<GameObject>();
-            }
-            else
-            {
-                foreach (GameObject g in AllGameObjects)
-                {
-                    g.Load(m_World);
-                }
-            }
             GameObjectGrid = new List<GameObject>[(Game1.GameWidth / GRID_DIVISIONS_X)+2][];
             for (int x = 0; x < GameObjectGrid.Length; ++x )
             {
@@ -242,10 +230,10 @@ namespace TimeToLive
                     nearPlayer = false;
                 }
             }
-            Zombie z = new Zombie();
+            Zombie z = new Zombie(m_PhysicManager);
             Vector2 temp = new Vector2(x,y);
             z.Position = temp;
-            z.LoadContent(m_World);
+            z.LoadContent();
             AllGameObjects.Add(z);
         }
 
@@ -270,11 +258,11 @@ namespace TimeToLive
             int powerUpType = 0;
             if (powerUpType == 0) 
             {
-                m_PowerUp = new CheatPowerUp(CheatPowerUp.CheatTypes.Time);
+                m_PowerUp = new CheatPowerUp(CheatPowerUp.CheatTypes.Time, m_PhysicManager);
             }
             else if (powerUpType == 1)
             {
-                m_PowerUp = new WeaponPowerUp((WeaponPowerUp.WeaponType)ZombieRandom.Next(3));
+                m_PowerUp = new WeaponPowerUp((WeaponPowerUp.WeaponType)ZombieRandom.Next(3), m_PhysicManager);
             }
             Vector2 temp = new Vector2();
             temp.X = MathHelper.Clamp(x, 0 + UI.OFFSET, Game1.GameWidth-15);
@@ -302,12 +290,12 @@ namespace TimeToLive
                     nearPlayer = false;
                 }
             }
-            Slime z = new Slime();
+            Slime z = new Slime(m_PhysicManager);
             Vector2 temp = new Vector2();
             temp.X = x;
             temp.Y = y;
             z.Position = temp;
-            z.LoadContent(m_World);
+            z.LoadContent();
             AllGameObjects.Add(z);
         }
         private void SpawnFace()
@@ -327,19 +315,19 @@ namespace TimeToLive
                     nearPlayer = false;
                 }
             }
-            Anubis z = new Anubis();
+            Anubis z = new Anubis(m_PhysicManager);
             Vector2 temp = new Vector2();
             temp.X = x;
             temp.Y = y;
             z.Position = temp;
-            z.LoadContent(m_World);
+            z.LoadContent();
             ObjectManager.AllGameObjects.Add(z);
         }
         private void SpawnWolf()
         {
-            Wolf wolf = new Wolf();
+            Wolf wolf = new Wolf(m_PhysicManager);
             wolf.Position = new Vector2(m_Player.Position.X + 50, m_Player.Position.Y + 50);
-            wolf.LoadContent(m_World);
+            wolf.LoadContent();
             ObjectManager.AllGameObjects.Add(wolf);
         }
         private bool shroomSpawned = false;
@@ -347,9 +335,9 @@ namespace TimeToLive
         {
 
             if (shroomSpawned) return;
-            Shroom mushroom = new Shroom();
+            Shroom mushroom = new Shroom(m_PhysicManager);
             mushroom.Position = new Vector2(m_Player.Position.X + 150, m_Player.Position.Y - 150);
-            mushroom.LoadContent(m_World);
+            mushroom.LoadContent();
             ObjectManager.AllGameObjects.Add(mushroom);
             shroomSpawned = true;
         }
@@ -359,9 +347,9 @@ namespace TimeToLive
             int x = r.Next(0, 10);
             if (x == 5)
             {
-                return new WeaponPowerUp(WeaponPowerUp.WeaponType.Shotgun);
+                return new WeaponPowerUp(WeaponPowerUp.WeaponType.Shotgun, m_PhysicManager);
             }
-            return new CheatPowerUp(CheatPowerUp.CheatTypes.Time);
+            return new CheatPowerUp(CheatPowerUp.CheatTypes.Time, m_PhysicManager);
         }
         public delegate void SpawnDelegate();
         public class SpawnTimer

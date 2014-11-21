@@ -71,7 +71,7 @@ namespace TimeToLive
         public bool DrawRedFlash;
         private int m_HowLongInvincible = 0;
         private Vector2 m_InitialPosition;
-        public Player() : base()
+        public Player(PhysicsManager manager) : base(manager)
         {
 			
         }
@@ -96,7 +96,7 @@ namespace TimeToLive
             DrawRedFlash = false;
         }
         //check collisions with things
-        public void CheckCollisions(World _world)
+        public void CheckCollisions()
         {
             //float nearestLength = float.MaxValue;
             List<List<GameObject>> objectsToCheck = ObjectManager.GetCellsOfRectangle(Bounds);
@@ -181,7 +181,7 @@ namespace TimeToLive
                         }
                         //this probably should check for collision only when firing
                         //that way the bullet lines wont update to the next person while a shot is going off
-                        if (w.CheckCollision(ob))
+                        if (w.CheckCollision(ob, m_PhysicsManager))
                         {
                             ++Score;
                         }
@@ -189,7 +189,7 @@ namespace TimeToLive
                 }
             }
         }
-        public void LoadContent(World world)
+        public void LoadContent(PhysicsManager physManager)
         {
             m_InitialPosition = Position;
             Texture = TextureBank.GetTexture("Player");
@@ -198,7 +198,8 @@ namespace TimeToLive
             {
                 w.LoadContent();
             }
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
+            Fixture fixture;
+            _circleBody = physManager.GetBody(ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position), out fixture);
             _circleBody.BodyType = BodyType.Dynamic;
             _circleBody.Mass = 4f;
             _circleBody.LinearDamping = 2f;
@@ -357,7 +358,7 @@ namespace TimeToLive
                     m_WeaponShotPoint = Position + Vector2.Transform(offsetFromPlayer, rotMatrix);
                     foreach (Weapon w in m_Weapons)
                     {
-                        w.Update(m_WeaponShotPoint, playerVel, RotationAngle, 10, isFireButtonDown, elapsedTime);
+                        w.Update(m_WeaponShotPoint, playerVel, RotationAngle, 10, isFireButtonDown, m_PhysicsManager, elapsedTime);
                     }
                     break;
                 case PlayerState.Dead:

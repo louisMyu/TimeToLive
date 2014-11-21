@@ -47,15 +47,15 @@ namespace TimeToLive
 
         private SlimeTrail m_SlimeTrail;
         private int m_SlimeTrailTimeCounter = 0;
-        public Slime()
-            : base()
+        public Slime(PhysicsManager manager)
+            : base(manager)
         {
             LifeTotal = 40;
 
         }
 
         private static Texture2D m_SlimeTrailTex;
-        public void LoadContent(World world)
+        public void LoadContent()
         {
             int dir = SlimeRandom.Next(4);
             m_Direction = new Vector2(0, 0);
@@ -91,7 +91,8 @@ namespace TimeToLive
             }
 
             m_SlimeTrail = new SlimeTrail(this);
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
+            Fixture fixture;
+            _circleBody = m_PhysicsManager.GetBody(ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position), out fixture);
             _circleBody.BodyType = BodyType.Dynamic;
             _circleBody.Mass = 5f;
             _circleBody.LinearDamping = 3f;
@@ -197,10 +198,7 @@ namespace TimeToLive
         #region IEnemy
         public void CleanBody()
         {
-            if (_circleBody != null)
-            {
-                GameplayScreen.m_World.RemoveBody(_circleBody);
-            }
+            m_PhysicsManager.ReturnBody(_circleBody);
         }
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
@@ -235,7 +233,7 @@ namespace TimeToLive
         }
         public void DropItem()
         {
-            PowerUp p = new CheatPowerUp(CheatPowerUp.CheatTypes.Time);
+            PowerUp p = new CheatPowerUp(CheatPowerUp.CheatTypes.Time, m_PhysicsManager);
             p.Position = Position;
             p.LoadContent();
             ObjectManager.PowerUpItems.Add(p);

@@ -78,7 +78,7 @@ namespace TimeToLive
         }
         public abstract void LoadContent();
         //this should be called every update if it exists for the player
-        public virtual void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool isFireDown, TimeSpan elapsedTime)
+        public virtual void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool isFireDown, PhysicsManager manager, TimeSpan elapsedTime)
         {
             //decrement unless its ready to fire or is being fired
             if (m_ElapsedFrames > 0 && !Firing)
@@ -87,7 +87,7 @@ namespace TimeToLive
             }
         }
         //returns true if enemy died
-        public virtual bool CheckCollision(GameObject ob)
+        public virtual bool CheckCollision(GameObject ob, PhysicsManager manager)
         {
             return false;
         }
@@ -106,7 +106,7 @@ namespace TimeToLive
 
         public abstract void LoadWeapon();
         protected abstract void LoadTextures();
-        public virtual void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos)
+        public virtual void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos, PhysicsManager manager)
         {
             List<Texture2D> gibTextures = enemy.GetExplodedParts();
             float shotgunSpreadAngle = 60;
@@ -117,7 +117,7 @@ namespace TimeToLive
             for (int i = 0; i < gibTextures.Count; ++i)
             {
                 ExplodedPart gib = new ExplodedPart();
-                gib.LoadContent(gibTextures[i], pos);
+                gib.LoadContent(gibTextures[i], pos, manager);
                 Vector2 halfAngle = Utilities.RadiansToVector2(Utilities.DegreesToRadians(-30));
                 gib.ApplyLinearForce(intersectingAngle - (halfAngle) + (i * 2 * halfAngle), Knockback * 1.5f);
                 //shoul be randomixed

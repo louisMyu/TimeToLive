@@ -56,9 +56,9 @@ namespace TimeToLive
         }
         //foreach line of the shotgun i need to update the lines based on the player center,
         //and rotate it and give it length, then update the graphical lines
-        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, TimeSpan elapsedTime)
+        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, PhysicsManager manager, TimeSpan elapsedTime)
         {
-            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, elapsedTime);
+            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, manager, elapsedTime);
             if (!Firing)
             {
                 //float accuracyInRadians = WEAPON_RANDOM.Next(0, accuracy) * ((float)Math.PI / 180);
@@ -115,7 +115,7 @@ namespace TimeToLive
             }
         }
         //returns true if enemy died
-        public override bool CheckCollision(GameObject ob)
+        public override bool CheckCollision(GameObject ob, PhysicsManager manager)
         {
             if (!CanDamage)
             {
@@ -192,7 +192,7 @@ namespace TimeToLive
             array[1] = new AnimationInfo(TextureBank.GetTexture(shotString2), -1);
             m_FireAnimation = new AnimationManager(array, m_SavedShotInfo, 60);
         }
-        public override void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos)
+        public override void ExplodeEnemy(Vector2 intersectingAngle, IEnemy enemy, Vector2 pos, PhysicsManager manager)
         {
             List<Texture2D> gibTextures = enemy.GetExplodedParts();
             float spreadAngle = 180;
@@ -201,7 +201,7 @@ namespace TimeToLive
             for (int i = 0; i < gibTextures.Count; ++i)
             {
                 ExplodedPart gib = new ExplodedPart();
-                gib.LoadContent(gibTextures[i], pos);
+                gib.LoadContent(gibTextures[i], pos, manager);
                 Vector2 halfAngle = Utilities.RadiansToVector2(Utilities.DegreesToRadians(-30));
                 gib.ApplyLinearForce(intersectingAngle - (halfAngle) + (i * 2 * halfAngle), Knockback);
                 //should be randomixed

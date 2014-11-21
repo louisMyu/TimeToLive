@@ -19,12 +19,11 @@ namespace TimeToLive
         {
             base.LoadContent();
         }
-        public override void Load(FarseerPhysics.Dynamics.World world)
+        public PowerUp(PhysicsManager manager)
+            : base(manager)
         {
-            Texture = TextureBank.GetTexture("Powerup");
-        }
-        public PowerUp() { }
 
+        }
         public virtual SoundEffectInstance GetPickupSound()
         {
             return SoundBank.GetSoundInstance("SoundWeaponPickup");
@@ -48,12 +47,9 @@ namespace TimeToLive
         {
             base.LoadContent();
         }
-        public override void Load(FarseerPhysics.Dynamics.World world)
-        {
-            base.Load(world);
-        }
-        public CheatPowerUp() { }
-        public CheatPowerUp(CheatTypes type)
+
+        public CheatPowerUp(PhysicsManager manager) :base(manager){ }
+        public CheatPowerUp(CheatTypes type, PhysicsManager manager) : base(manager)
         {
             CheatType = type;
             CreateCheat();
@@ -126,11 +122,8 @@ namespace TimeToLive
             SetWeaponPowerUpTexture(Type);
             base.LoadContent();
         }
-        public override void Load(FarseerPhysics.Dynamics.World world)
-        {
-            base.Load(world);
-        }
-        public WeaponPowerUp(WeaponType type)
+
+        public WeaponPowerUp(WeaponType type, PhysicsManager manager) : base(manager)
         {
             Type = type;
         }
