@@ -11,7 +11,6 @@ using Windows.Devices.Sensors;
 
 namespace TimeToLive
 {
-
     public class Input
     {
         public static bool UseAccelerometer = true;
