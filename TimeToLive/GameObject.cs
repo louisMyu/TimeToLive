@@ -120,7 +120,7 @@ namespace TimeToLive
         {
             m_Texture = tex;
             Fixture fixture;
-            Body = physics.GetBody(ConvertUnits.ToSimUnits(tex.Height/2), 1f, pos, out fixture);
+            Body = physics.GetBody(ConvertUnits.ToSimUnits(tex.Height / 2), 1f, ConvertUnits.ToSimUnits(pos), out fixture);
             Body.BodyType = BodyType.Dynamic;
             Body.Mass = 2.5f;
             Body.LinearDamping = 2.5f;
@@ -148,7 +148,8 @@ namespace TimeToLive
         }
         public void Draw(SpriteBatch spriteBatch, Color c)
         {
-            spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(Body.Position), null, c, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
+            Vector2 temp = ConvertUnits.ToDisplayUnits(Body.Position);
+            spriteBatch.Draw(m_Texture, temp, null, c, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
         }
         public void DrawOffset(SpriteBatch spriteBatch, Color c)
         {

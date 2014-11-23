@@ -54,7 +54,6 @@ namespace TimeToLive
         {
             if (m_PhysicsBodies.Count >= MAX_NUM_BODIES)
             {
-                m_World.RemoveBody(body);
                 body.Dispose();
                 return;
             }

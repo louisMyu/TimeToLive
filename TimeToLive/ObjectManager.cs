@@ -53,7 +53,7 @@ namespace TimeToLive
             AllGameObjects = new List<GameObject>();
 
             m_SpawnTimers = new List<SpawnTimer>();
-            m_SpawnTimers.Add(new SpawnTimer(200, SpawnZombie, "Zombie"));
+            m_SpawnTimers.Add(new SpawnTimer(850, SpawnZombie, "Zombie"));
             //m_SpawnTimers.Add(new SpawnTimer(4000, SpawnFace, "Anubis"));
             //m_SpawnTimers.Add(new SpawnTimer(4000, SpawnShroom, "Shroom"));
             m_SpawnTimers.Add(new SpawnTimer(5500, MakeItem, "Item"));

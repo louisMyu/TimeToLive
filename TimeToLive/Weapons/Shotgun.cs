@@ -212,12 +212,13 @@ namespace TimeToLive
                 UI.ActiveGibs.Add(gib);
             }
         }
-        #region WeaponStat overrides
         public override void ApplyKickback(Player player)
         {
             Vector2 temp = new Vector2((float)Math.Cos(player.RotationAngle), (float)Math.Sin(player.RotationAngle)) * -100;
             player.ApplyLinearForce(temp);
         }
+        #region WeaponStat overrides
+
         public override void SetWeaponStats(int level)
         {
             if (WeaponStatistics == null)

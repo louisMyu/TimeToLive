@@ -273,18 +273,18 @@ namespace TimeToLive
                         if (cheat == null) continue;
                         cheat.Update(this);
                     }
-                    foreach (Weapon weapon in m_Weapons)
-                    {
-                        if (!KickedBack && isFireButtonDown && weapon.CanFire())
-                        {
-                            KickedBack = true;
-                            weapon.ApplyKickback(this);
-                        }
-                        if (!weapon.Firing && KickedBack)
-                        {
-                            KickedBack = false;
-                        }
-                    }
+                    //foreach (Weapon weapon in m_Weapons)
+                    //{
+                    //    if (!KickedBack && isFireButtonDown && weapon.CanFire())
+                    //    {
+                    //        KickedBack = true;
+                    //        weapon.ApplyKickback(this);
+                    //    }
+                    //    if (!weapon.Firing && KickedBack)
+                    //    {
+                    //        KickedBack = false;
+                    //    }
+                    //}
                     m_Moving = true;
                     ObjectManager.GetCell(Position).Remove(this);
                     //should really just use the Sim's position for everything instead of converting from one to another
