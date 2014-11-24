@@ -28,7 +28,6 @@ namespace TimeToLive
         private float GameWidth;
         private float GameHeight;
 
-        private Texture2D m_HeartTexture;
         private Texture2D m_SkullBackground;
 
         public Effect m_SkullLeftEyePointLight;
@@ -72,17 +71,17 @@ namespace TimeToLive
 
             Vector2 viewport = new Vector2(GameWidth, GameHeight);
             Vector2 textSize = ColunaFont.MeasureString("00:00:00");
-            DeathTimerScale = Utilities.GetSpriteScaling(new Vector2((int)((viewport.Y) * 0.5), (int)((viewport.X) * 0.5)), textSize);
-            Vector2 textPosition = (viewport) / 2;
+            DeathTimerScale = Utilities.GetSpriteScaling(new Vector2((int)((viewport.X) * 0.1), (int)((viewport.Y) * 0.1)), textSize);
+            Vector2 scaledTextSize = textSize*DeathTimerScale;
+            Vector2 textPosition = new Vector2(viewport.X - (scaledTextSize.X/2)-10, (scaledTextSize.Y/2)+ 10);
             DeathTimerPosition = textPosition;
             DeathTimerOrigin = new Vector2(textSize.X / 2, textSize.Y / 2);
 
             textSize = ColunaFont.MeasureString("00");
             CountdownScale = Utilities.GetSpriteScaling(new Vector2((int)(viewport.Y * 0.45), (int)(viewport.X * 0.35)), textSize);
-            CountdownPosition = textPosition;
+            CountdownPosition = viewport / 2;
             CountdownOrigin = new Vector2(textSize.X / 2, textSize.Y / 2);
 
-            m_HeartTexture = TextureBank.GetTexture("Heart50x45");
             m_SkullBackground = TextureBank.GetTexture("isolatedSkullBG01");
 
             m_SkullLeftEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
