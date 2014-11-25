@@ -8,13 +8,14 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 using Microsoft.Xna.Framework;
 using Windows.Devices.Sensors;
+using Windows.UI.Core;
 
 namespace TimeToLive
 {
     public class Input
     {
         public static bool UseAccelerometer = true;
-        public static Accelerometer accelerometer;
+        private Accelerometer accelerometer;
         public static float AccelerometerAlpha = 0.35f;
         public static float AccelerometerThreshold = 0.1f;
         public static Vector3 CurrentAccelerometerValues { get; set; }
@@ -22,10 +23,12 @@ namespace TimeToLive
         public TouchCollection TouchState;
         private static Queue<Vector3> LastAcceleromeratorValues = new Queue<Vector3>();
         public readonly List<GestureSample> Gestures = new List<GestureSample>();
-        static Input()
+        private CoreDispatcher dispatcher;
+        public Input()
         {
             //Gestures = new List<GestureSample>();
             accelerometer = Windows.Devices.Sensors.Accelerometer.GetDefault();
+            dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             if (accelerometer != null)
             {
                 accelerometer = Windows.Devices.Sensors.Accelerometer.GetDefault();
@@ -36,57 +39,63 @@ namespace TimeToLive
             {
                 UseAccelerometer = false;
             }
+            
         }
-
-        private static void ReadingChanged(object sender, AccelerometerReadingChangedEventArgs e)
+        public void StartInput()
         {
-            AccelerometerReading reading = e.Reading;
-            Vector3 accelerationAverage = new Vector3();
-            //newAcceration.X = (float)(reading.AccelerationX * AccelerometerAlpha + reading.AccelerationX * (1.0f - AccelerometerAlpha));// +0.20f;
-            //newAcceration.Y = (float)(reading.AccelerationY * AccelerometerAlpha + reading.AccelerationY * (1.0f - AccelerometerAlpha));
-            //newAcceration.Z = (float)(reading.AccelerationZ * AccelerometerAlpha + reading.AccelerationZ * (1.0f - AccelerometerAlpha));
-            if (LastAcceleromeratorValues.Count == 5)
-            {
-                LastAcceleromeratorValues.Dequeue();
-            }
-            LastAcceleromeratorValues.Enqueue(new Vector3((float)reading.AccelerationX, (float)reading.AccelerationY, (float)reading.AccelerationZ));
-            foreach (Vector3 val in LastAcceleromeratorValues.ToList())
-            {
-                accelerationAverage.X += val.X;
-                accelerationAverage.Y += val.Y;
-                accelerationAverage.Z += val.Z;
-            }
-            accelerationAverage.X /= 5;
-            accelerationAverage.Y /= 5;
-            accelerationAverage.Z /= 5;
+        }
+        private async void ReadingChanged(object sender, AccelerometerReadingChangedEventArgs e)
+        {
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    AccelerometerReading reading = e.Reading;
+                    Vector3 accelerationAverage = new Vector3();
+                    //newAcceration.X = (float)(reading.AccelerationX * AccelerometerAlpha + reading.AccelerationX * (1.0f - AccelerometerAlpha));// +0.20f;
+                    //newAcceration.Y = (float)(reading.AccelerationY * AccelerometerAlpha + reading.AccelerationY * (1.0f - AccelerometerAlpha));
+                    //newAcceration.Z = (float)(reading.AccelerationZ * AccelerometerAlpha + reading.AccelerationZ * (1.0f - AccelerometerAlpha));
+                    if (LastAcceleromeratorValues.Count == 5)
+                    {
+                        LastAcceleromeratorValues.Dequeue();
+                    }
+                    LastAcceleromeratorValues.Enqueue(new Vector3((float)reading.AccelerationX, (float)reading.AccelerationY, (float)reading.AccelerationZ));
+                    foreach (Vector3 val in LastAcceleromeratorValues.ToList())
+                    {
+                        accelerationAverage.X += val.X;
+                        accelerationAverage.Y += val.Y;
+                        accelerationAverage.Z += val.Z;
+                    }
+                    accelerationAverage.X /= 5;
+                    accelerationAverage.Y /= 5;
+                    accelerationAverage.Z /= 5;
 
-            Vector3 newAcceleration = new Vector3();
-            if (accelerationAverage.X > AccelerometerThreshold)
-            {
-                newAcceleration.X = (float)(CurrentAccelerometerValues.X + AccelerometerAlpha * (reading.AccelerationX - CurrentAccelerometerValues.X));
-            }
-            else
-            {
-                newAcceleration.X = accelerationAverage.X;
-            }
-            if (accelerationAverage.Y > AccelerometerThreshold)
-            {
-                newAcceleration.Y = (float)(CurrentAccelerometerValues.Y + AccelerometerAlpha * (reading.AccelerationY - CurrentAccelerometerValues.Y));
-            }
-            else
-            {
-                newAcceleration.Y = accelerationAverage.Y;
-            }
-            if (newAcceleration.Z > AccelerometerThreshold)
-            {
-                newAcceleration.Z = (float)(CurrentAccelerometerValues.Z + AccelerometerAlpha * (reading.AccelerationZ - CurrentAccelerometerValues.Z));
-            }
-            else
-            {
-                newAcceleration.Z = accelerationAverage.Z;
-            }
+                    Vector3 newAcceleration = new Vector3();
+                    if (accelerationAverage.X > AccelerometerThreshold)
+                    {
+                        newAcceleration.X = (float)(CurrentAccelerometerValues.X + AccelerometerAlpha * (reading.AccelerationX - CurrentAccelerometerValues.X));
+                    }
+                    else
+                    {
+                        newAcceleration.X = accelerationAverage.X;
+                    }
+                    if (accelerationAverage.Y > AccelerometerThreshold)
+                    {
+                        newAcceleration.Y = (float)(CurrentAccelerometerValues.Y + AccelerometerAlpha * (reading.AccelerationY - CurrentAccelerometerValues.Y));
+                    }
+                    else
+                    {
+                        newAcceleration.Y = accelerationAverage.Y;
+                    }
+                    if (newAcceleration.Z > AccelerometerThreshold)
+                    {
+                        newAcceleration.Z = (float)(CurrentAccelerometerValues.Z + AccelerometerAlpha * (reading.AccelerationZ - CurrentAccelerometerValues.Z));
+                    }
+                    else
+                    {
+                        newAcceleration.Z = accelerationAverage.Z;
+                    }
 
-            CurrentAccelerometerValues = newAcceleration;
+                    CurrentAccelerometerValues = newAcceleration;
+                });
         }
 
         /// <summary>

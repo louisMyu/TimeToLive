@@ -33,7 +33,7 @@ namespace TimeToLive
         List<GameScreen> screens = new List<GameScreen>();
         List<GameScreen> screensToUpdate = new List<GameScreen>();
 
-        Input input = new Input();
+        public Input input = new Input();
 
         SpriteBatch spriteBatch;
         SpriteFont font;
