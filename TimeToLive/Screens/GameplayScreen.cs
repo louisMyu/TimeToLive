@@ -61,7 +61,6 @@ namespace TimeToLive
 
         #region Initialization
 
-
         /// <summary>
         /// Constructor.
         /// </summary>
