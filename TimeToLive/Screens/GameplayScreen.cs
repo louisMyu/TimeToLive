@@ -75,7 +75,6 @@ namespace TimeToLive
             m_CountdownTime = TimeSpan.FromSeconds(5.5);
         }
 
-
         /// <summary>
         /// Load graphics content for the game.
         /// </summary>
