@@ -132,7 +132,6 @@ namespace TimeToLive
             //content.Unload();
         }
 
-
         #endregion
 
         #region Update and Draw
@@ -256,7 +255,6 @@ namespace TimeToLive
             TouchesCollected = input.TouchState;
         }
 
-        private bool m_BackgroundDrawn;
         /// <summary>
         /// Draws the gameplay screen.
         /// </summary>
@@ -292,13 +290,13 @@ namespace TimeToLive
                     }
                     _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                                             null, scale);
-                    UserInterface.DrawDeathTimer(_spriteBatch);
                     GlobalObjectManager.DrawSlimeTrails(_spriteBatch);
                     GlobalObjectManager.DrawPowerUps(_spriteBatch);
                     UserInterface.DrawActiveGibs(_spriteBatch);
                     GlobalObjectManager.Draw(_spriteBatch);
                     m_Player.Draw(_spriteBatch);
-                    UserInterface.Draw(_spriteBatch, m_Player);
+                    //UserInterface.Draw(_spriteBatch, m_Player);
+                    UserInterface.DrawDeathTimer(_spriteBatch);
                     _spriteBatch.End();
                     break;
                 case GameState.Countdown:
