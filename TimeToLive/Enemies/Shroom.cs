@@ -67,7 +67,7 @@ namespace TimeToLive
             }
         }
 
-        public void LoadContent(World world)
+        public override void LoadContent()
         {
             m_Direction = new Vector2(0, 0);
             foreach (string s in m_BlinkingTextures)
@@ -88,8 +88,8 @@ namespace TimeToLive
                 m_Origin.X = Width / 2;
                 m_Origin.Y = Height / 2;
             }
-
-            _circleBody = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(35 / 2f), 1f, ConvertUnits.ToSimUnits(Position));
+            Fixture fixture;
+            _circleBody = m_PhysicsManager.GetBody(ConvertUnits.ToSimUnits(35 / 2f), 0.5f, ConvertUnits.ToSimUnits(Position), out fixture);
             _circleBody.BodyType = BodyType.Dynamic;
             _circleBody.Mass = 5f;
             _circleBody.LinearDamping = 3f;

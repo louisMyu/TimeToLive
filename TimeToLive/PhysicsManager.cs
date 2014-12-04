@@ -46,6 +46,8 @@ namespace TimeToLive
             }
             bodyFromPool.Position = position;
             attached = FixtureFactory.AttachCircle(radius, density, bodyFromPool);
+            bodyFromPool.LinearVelocity = new Vector2(0,0);
+            bodyFromPool.AngularVelocity = 0;
             bodyFromPool.Enabled = true;
             return bodyFromPool;
         }
