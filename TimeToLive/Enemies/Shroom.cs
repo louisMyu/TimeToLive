@@ -247,6 +247,7 @@ namespace TimeToLive
                 Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
             }
 
+
             public Puff(PhysicsManager manager)
                 : base(manager)
             {
