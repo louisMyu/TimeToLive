@@ -15,6 +15,7 @@ namespace TimeToLive
         private const int GRID_DIVISIONS_X = 50;
         private const int GRID_DIVISIONS_Y = 50;
         public static List<GameObject> AllGameObjects;
+        public static List<GameObject> AnimatingExplosions;
         public static List<GameObject>[][] GameObjectGrid;
         public static List<SlimeTrail> SlimeTrails;
         public static List<PowerUp> PowerUpItems;
@@ -51,6 +52,7 @@ namespace TimeToLive
             PowerUpItems = new List<PowerUp>();
             SlimeTrails = new List<SlimeTrail>();
             AllGameObjects = new List<GameObject>();
+            AnimatingExplosions = new List<GameObject>();
 
             m_SpawnTimers = new List<SpawnTimer>();
             m_SpawnTimers.Add(new SpawnTimer(850, SpawnZombie, "Zombie"));
@@ -141,6 +143,7 @@ namespace TimeToLive
             }
             AllGameObjects.RemoveAll(x => x.CanDelete);
             PowerUpItems.RemoveAll(x => x.CanDelete);
+            AnimatingExplosions.RemoveAll(x => x.CanDelete);
 
             for (int i = 0; i < SlimeTrails.Count; ++i)
             {
@@ -152,8 +155,18 @@ namespace TimeToLive
                 }
             }
         }
-
-        public void Update(TimeSpan elapsedTime)
+        public void Update(Player p, TimeSpan time)
+        {
+            foreach (GameObject g in ObjectManager.AllGameObjects)
+            {
+                g.Update(p, time);
+            }
+            foreach (GameObject g in ObjectManager.AnimatingExplosions)
+            {
+                g.Update(p, time);
+            }
+        }
+        public void CleanUpDeadObjects(TimeSpan elapsedTime)
         {
             GameTimer += elapsedTime.TotalMilliseconds;
             CleanUp();
@@ -179,6 +192,13 @@ namespace TimeToLive
                 {
                     g.Draw(_spriteBatch);
                 }
+            }
+        }
+        public void DrawExplosions(SpriteBatch spritebatch)
+        {
+            foreach (GameObject g in AnimatingExplosions)
+            {
+                g.Draw(spritebatch);
             }
         }
         public void DrawSlimeTrails(SpriteBatch spriteBatch)

@@ -202,16 +202,13 @@ namespace TimeToLive
                         UserInterface.SetTimeToDeath(m_Player.TimeToDeath);
                         //check if a game reset or zombie hit and save state and do the action here,
                         //so that the game will draw the zombie intersecting the player
-                        foreach (GameObject g in ObjectManager.AllGameObjects)
-                        {
-                            g.Update(m_Player, customElapsedTime);
-                        }
+                        GlobalObjectManager.Update(m_Player, customElapsedTime);
                         m_Player.Update(customElapsedTime);
                         m_Player.CheckCollisions();
 
                         m_Player.CheckWeaponHits();
                         //cleanup dead objects
-                        GlobalObjectManager.Update(customElapsedTime);
+                        GlobalObjectManager.CleanUpDeadObjects(customElapsedTime);
 
                         m_PhysicsManager.Update((float)1.0f / 60f);
                         break;
@@ -295,7 +292,7 @@ namespace TimeToLive
                     UserInterface.DrawActiveGibs(_spriteBatch);
                     GlobalObjectManager.Draw(_spriteBatch);
                     m_Player.Draw(_spriteBatch);
-                    //UserInterface.Draw(_spriteBatch, m_Player);
+                    GlobalObjectManager.DrawExplosions(_spriteBatch);
                     UserInterface.DrawDeathTimer(_spriteBatch);
                     _spriteBatch.End();
                     break;

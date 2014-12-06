@@ -49,8 +49,7 @@ namespace TimeToLive
             LifeTotal = 40;
         }
 
-        private ZombieExplosion m_Explosion;
-        public void LoadContent()
+        public override void LoadContent()
         {
             m_State = MotionState.Locked;
             RotationAngle = (float)GameObject.RANDOM_GENERATOR.NextDouble();
@@ -77,7 +76,6 @@ namespace TimeToLive
             _circleBody.LinearDamping = 3f;
             _circleBody.Restitution = 1f;
 
-            m_Explosion = new ZombieExplosion(m_PhysicsManager);
         }
         public static void LoadTextures()
         {
@@ -121,11 +119,7 @@ namespace TimeToLive
 
             m_Direction = Vector2.Normalize(m_Direction);
             Vector2 amount = m_Direction * m_Speed;
-            if (m_KnockedBack)
-            {
-                amount += CurrentKickbackAmount;
-                m_KnockedBack = false;
-            }
+
             base.Move(amount, elapsedTime);
             //Later on, remove the clamp to the edge and despawn when too far out of the screen.
             //Vector2 temp = new Vector2();
@@ -141,11 +135,7 @@ namespace TimeToLive
         }
         public override void Update(Player player, TimeSpan elapsedTime)
         {
-            if (m_State == MotionState.Dead)
-            {
-                m_Explosion.Update(player, elapsedTime);
-                return;
-            }
+
             //get a normalized direction toward the point that was passed in, probably the player
             Vector2 vec = new Vector2(player.Position.X - Position.X, player.Position.Y - Position.Y);
             if (vec.LengthSquared() <= (275.0f * 275.0f))
@@ -160,11 +150,6 @@ namespace TimeToLive
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (m_State == MotionState.Dead)
-            {
-                m_Explosion.Draw(spriteBatch);
-                return;
-            }
             Vector2 temp = ConvertUnits.ToDisplayUnits(_circleBody.Position);
             spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(_circleBody.Position), null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
             //spriteBatch.Draw(m_Texture, Position, null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
@@ -197,7 +182,6 @@ namespace TimeToLive
             ExplodedParts.Add(TextureBank.GetTexture("ZombieBody"));
             ExplodedParts.Add(TextureBank.GetTexture("ZombieHead"));
         }
-        private Vector2 CurrentKickbackAmount;
         public void ApplyLinearForce(Vector2 angle, float amount)
         {
             Vector2 impulse = Vector2.Normalize(angle) * amount;
@@ -208,9 +192,12 @@ namespace TimeToLive
         }
         public void DoCollision(Player player)
         {
+            //this creates an explosion object which removes itself when its done animating
+            ZombieExplosion exp = new ZombieExplosion(Position, m_PhysicsManager);
+            exp.Trigger();
+            ObjectManager.AnimatingExplosions.Add(exp);
             ObjectManager.RemoveObject(this);
-            //this should cause an explosion
-
+           
         }
         public void DropItem()
         {
@@ -234,24 +221,23 @@ namespace TimeToLive
         private void HandleAnimation(object o, AnimationTimerEventArgs e)
         {
             Texture = TextureBank.GetTexture(textures[e.FrameIndex]);
-            m_Bounds.Width = Texture.Width;
-            m_Bounds.Height = Texture.Height;
             Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
         }
 
 
-        public ZombieExplosion(PhysicsManager manager)
+        public ZombieExplosion(Vector2 pos, PhysicsManager manager)
             : base(manager)
         {
             textures = new string[2];
             intervals = new float[2];
             textures[0] = "zBoom\\zBoom01";
-            textures[1] = "zBoom\\zBoom01";
+            textures[1] = "zBoom\\zBoom02";
 
             intervals[0] = 40;
             intervals[1] = 50;
 
             canDraw = false;
+            Position = pos;
         }
 
         public override void Update(Player player, TimeSpan elapsedTime)
@@ -264,6 +250,7 @@ namespace TimeToLive
                     animationTimer.IntervalOcccured -= HandleAnimation;
                     animationTimer = null;
                     canDraw = false;
+                    CanDelete = true;
                 }
             }
 
