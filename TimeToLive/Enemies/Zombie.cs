@@ -48,6 +48,8 @@ namespace TimeToLive
         {
             LifeTotal = 40;
         }
+
+        private ZombieExplosion m_Explosion;
         public void LoadContent()
         {
             m_State = MotionState.Locked;
@@ -74,6 +76,8 @@ namespace TimeToLive
             _circleBody.Mass = 5f;
             _circleBody.LinearDamping = 3f;
             _circleBody.Restitution = 1f;
+
+            m_Explosion = new ZombieExplosion(m_PhysicsManager);
         }
         public static void LoadTextures()
         {
@@ -84,7 +88,6 @@ namespace TimeToLive
             TextureBank.GetTexture("ZombieBody");
             TextureBank.GetTexture("ZombieHead");
         }
-
         //moves a set amount per frame toward a certain location
         public override void Move(Microsoft.Xna.Framework.Vector2 loc, TimeSpan elapsedTime)
         {
@@ -138,6 +141,11 @@ namespace TimeToLive
         }
         public override void Update(Player player, TimeSpan elapsedTime)
         {
+            if (m_State == MotionState.Dead)
+            {
+                m_Explosion.Update(player, elapsedTime);
+                return;
+            }
             //get a normalized direction toward the point that was passed in, probably the player
             Vector2 vec = new Vector2(player.Position.X - Position.X, player.Position.Y - Position.Y);
             if (vec.LengthSquared() <= (275.0f * 275.0f))
@@ -152,6 +160,11 @@ namespace TimeToLive
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (m_State == MotionState.Dead)
+            {
+                m_Explosion.Draw(spriteBatch);
+                return;
+            }
             Vector2 temp = ConvertUnits.ToDisplayUnits(_circleBody.Position);
             spriteBatch.Draw(m_Texture, ConvertUnits.ToDisplayUnits(_circleBody.Position), null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
             //spriteBatch.Draw(m_Texture, Position, null, Color.White, RotationAngle, m_Origin, 1.0f, SpriteEffects.None, 0f);
@@ -210,5 +223,64 @@ namespace TimeToLive
         #endregion
         #region Save/Load
         #endregion
+    }
+    class ZombieExplosion : GameObject
+    {
+        const string m_AnimationName = "ZombieExplosion";
+        AnimationTimer animationTimer;
+        string[] textures;
+        float[] intervals;
+        public bool canDraw;
+        private void HandleAnimation(object o, AnimationTimerEventArgs e)
+        {
+            Texture = TextureBank.GetTexture(textures[e.FrameIndex]);
+            m_Bounds.Width = Texture.Width;
+            m_Bounds.Height = Texture.Height;
+            Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+        }
+
+
+        public ZombieExplosion(PhysicsManager manager)
+            : base(manager)
+        {
+            textures = new string[2];
+            intervals = new float[2];
+            textures[0] = "zBoom\\zBoom01";
+            textures[1] = "zBoom\\zBoom01";
+
+            intervals[0] = 40;
+            intervals[1] = 50;
+
+            canDraw = false;
+        }
+
+        public override void Update(Player player, TimeSpan elapsedTime)
+        {
+            if (animationTimer != null)
+            {
+                animationTimer.Update(elapsedTime);
+                if (animationTimer.Done)
+                {
+                    animationTimer.IntervalOcccured -= HandleAnimation;
+                    animationTimer = null;
+                    canDraw = false;
+                }
+            }
+
+        }
+        public void Trigger()
+        {
+            animationTimer = new AnimationTimer(intervals, m_AnimationName, HandleAnimation, false);
+            canDraw = true;
+            Texture = TextureBank.GetTexture(textures[0]);
+            Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (canDraw)
+            {
+                base.Draw(spriteBatch);
+            }
+        }
     }
 }
