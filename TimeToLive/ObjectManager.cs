@@ -112,34 +112,16 @@ namespace TimeToLive
         }
         public void CleanUp()
         {
-            List<List<GameObject>> cellsToClean = new List<List<GameObject>>();
             foreach (GameObject ob in AllGameObjects)
             {
                 if (ob is IEnemy)
                 {
-                    if (((GameObject)ob).CanDelete)
-                    {
-                        cellsToClean.Add(ObjectManager.GetCell(ob.Position));
-                        continue;
-                    }
                     IEnemy temp = ob as IEnemy;
                     if (temp.GetHealth() <= 0)
                     {
-                        cellsToClean.Add(ObjectManager.GetCell(ob.Position));
                         RemoveObject(ob);
                     }
                 }
-            }
-            foreach (PowerUp p in PowerUpItems)
-            {
-                if (p.CanDelete)
-                {
-                    cellsToClean.Add(ObjectManager.GetCell(p.Position));
-                }
-            }
-            foreach (List<GameObject> cell in cellsToClean)
-            {
-                cell.RemoveAll(x => x.CanDelete);
             }
             AllGameObjects.RemoveAll(x => x.CanDelete);
             PowerUpItems.RemoveAll(x => x.CanDelete);
@@ -147,7 +129,6 @@ namespace TimeToLive
 
             for (int i = 0; i < SlimeTrails.Count; ++i)
             {
-                SlimeTrails[i].Update();
                 if (!SlimeTrails[i].Alive)
                 {
                     SlimeTrails.Remove(SlimeTrails[i]);
@@ -157,6 +138,11 @@ namespace TimeToLive
         }
         public void Update(Player p, TimeSpan time)
         {
+            GameTimer += time.TotalMilliseconds;
+            foreach (SpawnTimer timer in m_SpawnTimers)
+            {
+                timer.Update(time);
+            }
             foreach (GameObject g in ObjectManager.AllGameObjects)
             {
                 g.Update(p, time);
@@ -165,20 +151,20 @@ namespace TimeToLive
             {
                 g.Update(p, time);
             }
+            foreach (SlimeTrail trail in SlimeTrails)
+            {
+                trail.Update();
+            }
         }
         public void CleanUpDeadObjects(TimeSpan elapsedTime)
         {
-            GameTimer += elapsedTime.TotalMilliseconds;
             CleanUp();
             m_SpawnTimers.RemoveAll(x => x.CanDelete);
-            foreach (SpawnTimer timer in m_SpawnTimers)
-            {
-                timer.Update(elapsedTime);
-            }
-            if (GameTimer > 60000 && GameTimer < 65000)
-            {
-                m_SpawnTimers.RemoveAll(x => x.Name == "Anubis");
-            }
+
+            //if (GameTimer > 60000 && GameTimer < 65000)
+            //{
+            //    m_SpawnTimers.RemoveAll(x => x.Name == "Anubis");
+            //}
         }
         public void Draw(SpriteBatch _spriteBatch)
         {
