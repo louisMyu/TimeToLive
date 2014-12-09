@@ -164,6 +164,7 @@ namespace TimeToLive
             Move(player.Position, elapsedTime);
             ObjectManager.GetCell(Position).Add(this);
 
+
             currentPuffTime += elapsedTime.TotalSeconds;
             if (currentPuffTime > pufftime)
             {
