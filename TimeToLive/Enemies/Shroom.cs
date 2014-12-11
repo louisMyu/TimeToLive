@@ -149,8 +149,6 @@ namespace TimeToLive
 
             m_Bounds.X = (int)Position.X - Width / 2;
             m_Bounds.Y = (int)Position.Y - Height / 2;
-
-            
         }
         
         public void DoPuff()
