@@ -223,8 +223,6 @@ namespace TimeToLive
             Texture = TextureBank.GetTexture(textures[e.FrameIndex]);
             Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
         }
-
-
         public ZombieExplosion(Vector2 pos, PhysicsManager manager)
             : base(manager)
         {
