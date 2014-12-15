@@ -135,7 +135,11 @@ namespace TimeToLive
         }
         public override void Update(Player player, TimeSpan elapsedTime)
         {
-
+            if (LifeTotal <= 0)
+            {
+                ObjectManager.RemoveObject(this);
+                return;
+            }
             //get a normalized direction toward the point that was passed in, probably the player
             Vector2 vec = new Vector2(player.Position.X - Position.X, player.Position.Y - Position.Y);
             if (vec.LengthSquared() <= (275.0f * 275.0f))
@@ -197,7 +201,6 @@ namespace TimeToLive
             exp.Trigger();
             ObjectManager.AnimatingExplosions.Add(exp);
             ObjectManager.RemoveObject(this);
-           
         }
         public void DropItem()
         {

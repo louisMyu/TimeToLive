@@ -158,6 +158,11 @@ namespace TimeToLive
         }
         public override void Update(Player player, TimeSpan elapsedTime)
         {
+            if (LifeTotal <= 0)
+            {
+                ObjectManager.RemoveObject(this);
+                return;
+            }
             ObjectManager.GetCell(Position).Remove(this);
             Move(player.Position, elapsedTime);
             ObjectManager.GetCell(Position).Add(this);

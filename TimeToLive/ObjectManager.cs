@@ -113,17 +113,6 @@ namespace TimeToLive
         }
         public void CleanUp()
         {
-            foreach (GameObject ob in AllGameObjects)
-            {
-                if (ob is IEnemy)
-                {
-                    IEnemy temp = ob as IEnemy;
-                    if (temp.GetHealth() <= 0)
-                    {
-                        RemoveObject(ob);
-                    }
-                }
-            }
             AllGameObjects.RemoveAll(x => x.CanDelete);
             PowerUpItems.RemoveAll(x => x.CanDelete);
             AnimatingExplosions.RemoveAll(x => x.CanDelete);

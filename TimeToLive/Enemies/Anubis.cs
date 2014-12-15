@@ -129,6 +129,11 @@ namespace TimeToLive
         }
         public override void Update(Player player, TimeSpan elapsedTime)
         {
+            if (LifeTotal <= 0)
+            {
+                ObjectManager.RemoveObject(this);
+                return;
+            }
             Vector2 playerPosition = player.Position;
             ObjectManager.GetCell(Position).Remove(this);
             //get a normalized direction toward the point that was passed in, probably the player

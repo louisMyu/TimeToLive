@@ -68,23 +68,23 @@ namespace TimeToLive
         }
         //foreach line of the shotgun i need to update the lines based on the player center,
         //and rotate it and give it length, then update the graphical lines
-        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, PhysicsManager manager, TimeSpan elapsedTime)
+        public override void Update(Vector2 gunMountPoint, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, PhysicsManager manager, TimeSpan elapsedTime)
         {
-            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, manager, elapsedTime);
+            base.Update(gunMountPoint, playerVelocity, rotationAngle, accuracy, shotFired, manager, elapsedTime);
             if (!Firing)
             {
-                float accuracyInRadians = WEAPON_RANDOM.Next(0, accuracy) * ((float)Math.PI / 180);
-                //TODO: add a random so its either plus or minus accuracy
-                float centerVector = rotationAngle - accuracyInRadians;
+                //float accuracyInRadians = WEAPON_RANDOM.Next(0, accuracy) * ((float)Math.PI / 180);
+                ////TODO: add a random so its either plus or minus accuracy
+                //float centerVector = rotationAngle - accuracyInRadians;
 
-                float leftAngle = centerVector - (Spread / (NumberOfBullets - 1));
+                float leftAngle = rotationAngle - (Spread / (NumberOfBullets - 1));
                 LeftAngle = leftAngle;
                 foreach (Line line in m_BulletLines)
                 {
-                    line.Update(playerCenter, leftAngle, SightRange);
+                    line.Update(gunMountPoint, leftAngle, SightRange);
                     leftAngle += (float)(Spread / (NumberOfBullets - 1));
                 }
-                m_CurrentShotInfo = new SpriteInfo(playerCenter, playerVelocity, rotationAngle, NumberOfBullets, leftAngle);
+                m_CurrentShotInfo = new SpriteInfo(gunMountPoint, playerVelocity, rotationAngle, NumberOfBullets, leftAngle);
             }
             //firing a shot, save the state
             if (!Firing && shotFired && CanFire())
@@ -107,6 +107,18 @@ namespace TimeToLive
                 if (m_FireAnimation.CanStartAnimating())
                     m_FireAnimation.Finished = false;
             }
+            //if i delete this here the show will not follow the player
+            if (m_CurrentShotInfo != null)
+            {
+                float leftAngle = rotationAngle - (Spread / (NumberOfBullets - 1));
+                m_CurrentShotInfo.Position = gunMountPoint;
+                LeftAngle = leftAngle;
+                foreach (Line line in m_BulletLines)
+                {
+                    line.Update(gunMountPoint, leftAngle, SightRange);
+                    leftAngle += (float)(Spread / (NumberOfBullets - 1));
+                }
+            }
         }
         //returns true if enemy died
         public override bool CheckCollision(GameObject ob, PhysicsManager manager)
@@ -123,7 +135,7 @@ namespace TimeToLive
                     Vector2 intersectingAngle = new Vector2(line.P2.X - line.P1.X, line.P2.Y - line.P1.Y);
                     intersectingAngle.Normalize();
                     IEnemy enemy;
-                    if ((enemy = ob as IEnemy) != null)
+                    if ((enemy = ob as IEnemy) != null && enemy.GetHealth() > 0)
                     {
                         enemy.AddToHealth(-m_ShotgunDamage);
                         if (enemy.GetHealth() <= 0)

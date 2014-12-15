@@ -113,7 +113,7 @@ namespace TimeToLive
                     }
                     if (ob.m_Bounds.Intersects(this.m_Bounds))
                     {
-                        if (ob is IEnemy)
+                        if (ob is IEnemy && !ob.CanDelete)
                         {
                             IEnemy enemy = ob as IEnemy;
                             //get the amount of time that should be removed from the enemy and remove it from the player
@@ -210,7 +210,6 @@ namespace TimeToLive
             RedFlashTexture = TextureBank.GetTexture("RED");
         }
 
-        private bool KickedBack = false;
         //moves a set amount per frame toward a certain location
         public override void Move(Microsoft.Xna.Framework.Vector2 loc, TimeSpan elapsedTime)
         {

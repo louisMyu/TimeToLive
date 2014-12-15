@@ -96,10 +96,6 @@ namespace TimeToLive
 
             TimeAlmostOut = false;
             m_Period = MAX_PERIOD;
-            //if (timeToDeath.Seconds <= OSCILLATE_START)
-            //{
-            //    m_Period = (int)(timeToDeath.TotalSeconds / OSCILLATE_START * (MAX_PERIOD - MIN_PERIOD)) + MIN_PERIOD;
-            //}
             if (TimeToDeath.TotalSeconds <= OSCILLATE_START)
             {
                 TimeAlmostOut = true;
@@ -155,10 +151,6 @@ namespace TimeToLive
 
         public void Draw(SpriteBatch spriteBatch, Player p)
         {
-            //if (p.DrawRedFlash)
-            //{
-            //    spriteBatch.Draw(p.RedFlashTexture, new Vector2(PlayfieldBottom, 0), null, Color.White, 0, new Vector2(0,0),Utilities.GetSpriteScaling(new Vector2(GameWidth-PlayfieldBottom, GameHeight), new Vector2(p.RedFlashTexture.Width, p.RedFlashTexture.Height)) ,SpriteEffects.None, 0);
-            //}
 
         }
         public void DrawBackground(SpriteBatch spriteBatch)
@@ -188,7 +180,7 @@ namespace TimeToLive
         public void DrawDeathTimer(SpriteBatch spriteBatch)
         {
             string timeToDeathString = TimeToDeath.ToString(@"mm\:ss\:ff");
-            spriteBatch.DrawString(ColunaFont, timeToDeathString, DeathTimerPosition, Color.Blue * 0.45f, 0, 
+            spriteBatch.DrawString(ColunaFont, timeToDeathString, DeathTimerPosition, Color.Black * 0.45f, 0, 
                                     DeathTimerOrigin, DeathTimerScale, SpriteEffects.None, 0.0f);
         }
 
