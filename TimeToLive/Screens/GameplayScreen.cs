@@ -56,7 +56,7 @@ namespace TimeToLive
         private GameState m_GameState;
         private bool songPlaying = false;
         RenderTarget2D backgroundTexture;
-
+        private bool m_BackGroundDrawnOnce = false;
         #endregion
 
         #region Initialization
@@ -258,12 +258,7 @@ namespace TimeToLive
         public override void Draw(GameTime gameTime, Matrix scale)
         {
             SpriteBatch _spriteBatch = ScreenManager.SpriteBatch;
-            ScreenManager.GraphicsDevice.SetRenderTarget(backgroundTexture);
-            _spriteBatch.Begin();
-            UserInterface.DrawBackground(_spriteBatch);
-            //UserInterface.DrawBakedGibs(_spriteBatch);
-            _spriteBatch.End();
-            ScreenManager.GraphicsDevice.SetRenderTarget(null);
+
             //make sure the game has loaded and has updated at least one frame
             if (!isLoaded || !isUpdated)
             {
@@ -274,6 +269,12 @@ namespace TimeToLive
             {
                 case GameState.Dying:
                 case GameState.Playing:
+                    ScreenManager.GraphicsDevice.SetRenderTarget(backgroundTexture);
+                    _spriteBatch.Begin();
+                    UserInterface.DrawBackground(_spriteBatch);
+                    UserInterface.DrawBakedGibs(_spriteBatch, m_PhysicsManager);
+                    _spriteBatch.End();
+                    ScreenManager.GraphicsDevice.SetRenderTarget(null);
                     _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                                             null, scale);
                     _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);
@@ -297,6 +298,16 @@ namespace TimeToLive
                     _spriteBatch.End();
                     break;
                 case GameState.Countdown:
+                    if (!m_BackGroundDrawnOnce)
+                    {
+                        ScreenManager.GraphicsDevice.SetRenderTarget(backgroundTexture);
+                        _spriteBatch.Begin();
+                        UserInterface.DrawBackground(_spriteBatch);
+                        UserInterface.DrawBakedGibs(_spriteBatch, m_PhysicsManager);
+                        _spriteBatch.End();
+                        ScreenManager.GraphicsDevice.SetRenderTarget(null);
+                        m_BackGroundDrawnOnce = true;
+                    }
                     _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise,
                         null, scale);
                     _spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), UserInterface.BackGroundHueColor);

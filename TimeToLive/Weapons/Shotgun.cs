@@ -107,18 +107,18 @@ namespace TimeToLive
                 if (m_FireAnimation.CanStartAnimating())
                     m_FireAnimation.Finished = false;
             }
-            //if i delete this here the show will not follow the player
-            if (m_CurrentShotInfo != null)
-            {
-                float leftAngle = rotationAngle - (Spread / (NumberOfBullets - 1));
-                m_CurrentShotInfo.Position = gunMountPoint;
-                LeftAngle = leftAngle;
-                foreach (Line line in m_BulletLines)
-                {
-                    line.Update(gunMountPoint, leftAngle, SightRange);
-                    leftAngle += (float)(Spread / (NumberOfBullets - 1));
-                }
-            }
+            ////if i delete this here the show will not follow the player
+            //if (m_CurrentShotInfo != null)
+            //{
+            //    float leftAngle = rotationAngle - (Spread / (NumberOfBullets - 1));
+            //    m_CurrentShotInfo.Position = gunMountPoint;
+            //    LeftAngle = leftAngle;
+            //    foreach (Line line in m_BulletLines)
+            //    {
+            //        line.Update(gunMountPoint, leftAngle, SightRange);
+            //        leftAngle += (float)(Spread / (NumberOfBullets - 1));
+            //    }
+            //}
         }
         //returns true if enemy died
         public override bool CheckCollision(GameObject ob, PhysicsManager manager)
@@ -155,7 +155,7 @@ namespace TimeToLive
             
         }
 
-        public override void DrawBlast(SpriteBatch _spriteBatch, Vector2 position, float rot)
+        public override void DrawBlast(SpriteBatch _spriteBatch)
         {
             //i need to redo the animation design to firing a weapon
             //make it based on time and fire time is over reset the value

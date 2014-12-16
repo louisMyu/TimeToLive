@@ -110,7 +110,7 @@ namespace TimeToLive
 
         }
 
-        public override void DrawBlast(SpriteBatch _spriteBatch, Vector2 position, float rot)
+        public override void DrawBlast(SpriteBatch _spriteBatch)
         {
             foreach (Bullet b in m_Bullets)
             {

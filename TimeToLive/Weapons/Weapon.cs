@@ -94,7 +94,7 @@ namespace TimeToLive
 
         public abstract void DrawWeapon(SpriteBatch _spritebatch, Vector2 position, float rot);
 
-        public abstract void DrawBlast(SpriteBatch _spriteBatch, Vector2 position, float rot);
+        public abstract void DrawBlast(SpriteBatch _spriteBatch);
         public virtual bool CanFire()
         {
             if (m_ElapsedFrames == 0)

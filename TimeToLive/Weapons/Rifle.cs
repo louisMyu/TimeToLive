@@ -56,9 +56,9 @@ namespace TimeToLive
         }
         //foreach line of the shotgun i need to update the lines based on the player center,
         //and rotate it and give it length, then update the graphical lines
-        public override void Update(Vector2 playerCenter, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, PhysicsManager manager, TimeSpan elapsedTime)
+        public override void Update(Vector2 gunMountPoint, Vector2 playerVelocity, float rotationAngle, int accuracy, bool shotFired, PhysicsManager manager, TimeSpan elapsedTime)
         {
-            base.Update(playerCenter, playerVelocity, rotationAngle, accuracy, shotFired, manager, elapsedTime);
+            base.Update(gunMountPoint, playerVelocity, rotationAngle, accuracy, shotFired, manager, elapsedTime);
             if (!Firing)
             {
                 //float accuracyInRadians = WEAPON_RANDOM.Next(0, accuracy) * ((float)Math.PI / 180);
@@ -76,9 +76,9 @@ namespace TimeToLive
                 
                 foreach (Line line in m_BulletLines)
                 {
-                    line.Update(playerCenter, LeftAngle, SightRange);
+                    line.Update(gunMountPoint, LeftAngle, SightRange);
                 }
-                m_CurrentShotInfo = new SpriteInfo(playerCenter, playerVelocity, rotationAngle, NumberOfBullets, LeftAngle);
+                m_CurrentShotInfo = new SpriteInfo(gunMountPoint, playerVelocity, rotationAngle, NumberOfBullets, LeftAngle);
             }
             //firing a shot, save the state
             if (!Firing && shotFired && CanFire())
@@ -98,6 +98,17 @@ namespace TimeToLive
                 m_ChargeSound = SoundBank.GetSoundInstance("SoundRifleCharge");
                 m_ChargeSound.Play();
             }
+            if (Firing && m_FireAnimation.FrameCounter < CHARGE_TIME)
+            {
+                float leftAngle = rotationAngle - (Spread / (NumberOfBullets - 1));
+                m_CurrentShotInfo.Position = gunMountPoint;
+                LeftAngle = leftAngle;
+                foreach (Line line in m_BulletLines)
+                {
+                    line.Update(gunMountPoint, leftAngle, SightRange);
+                    leftAngle += (float)(Spread / (NumberOfBullets - 1));
+                }
+            }
             if (m_FireAnimation.Animating && m_FireAnimation.FrameCounter == CHARGE_TIME)
             {
                 if (m_ShotSound != null)
@@ -112,6 +123,25 @@ namespace TimeToLive
                 }
                 m_ShotSound = SoundBank.GetSoundInstance("SoundRifleShot");
                 m_ShotSound.Play();
+            }
+            if (m_FireAnimation.CanDraw() && Firing)
+            {
+                
+                //if frame is at 5
+                if (m_FireAnimation.FrameCounter == 20)
+                {
+                    CanDamage = true;
+                }
+
+                if (m_FireAnimation.FrameCounter == 40)
+                {
+                    CanDamage = false;
+                }
+            }
+            else if (Firing)
+            {
+                Firing = false;
+                m_ElapsedFrames = FireRate;
             }
         }
         //returns true if enemy died
@@ -128,7 +158,7 @@ namespace TimeToLive
                 {
                     Vector2 intersectingAngle = new Vector2(line.P2.X - line.P1.X, line.P2.Y - line.P1.Y);
                     IEnemy enemy;
-                    if ((enemy = ob as IEnemy) != null)
+                    if ((enemy = ob as IEnemy) != null && enemy.GetHealth() > 0)
                     {
                         enemy.ApplyLinearForce(intersectingAngle, Knockback);
                         enemy.AddToHealth(-10);
@@ -150,29 +180,12 @@ namespace TimeToLive
 
         }
 
-        public override void DrawBlast(SpriteBatch _spriteBatch, Vector2 position, float rot)
+        public override void DrawBlast(SpriteBatch _spriteBatch)
         {
-            if (m_FireAnimation.CanDraw() && Firing)
+            m_FireAnimation.DrawAnimationFrame(_spriteBatch);
+            foreach (Line line in m_BulletLines)
             {
-                m_FireAnimation.DrawAnimationFrame(_spriteBatch);
-                //if frame is at 5
-                if (m_FireAnimation.FrameCounter == 20)
-                {
-                    CanDamage = true;
-                }
-                foreach (Line line in m_BulletLines)
-                {
-                    line.Draw(_spriteBatch);
-                }
-                if (m_FireAnimation.FrameCounter == 40)
-                {
-                    CanDamage = false;
-                }
-            }
-            else if (Firing)
-            {
-                Firing = false;
-                m_ElapsedFrames = FireRate;
+                line.Draw(_spriteBatch);
             }
         }
         public override void LoadWeapon()

@@ -391,7 +391,10 @@ namespace TimeToLive
                         base.Draw(_spriteBatch);
                         foreach (Weapon w in m_Weapons)
                         {
-                            w.DrawBlast(_spriteBatch, Position, RotationAngle);
+                            if (w.Firing)
+                            {
+                                w.DrawBlast(_spriteBatch);
+                            }
                         }
                     }
                     //if (IsStopDown)
