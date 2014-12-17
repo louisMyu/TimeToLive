@@ -105,9 +105,12 @@ namespace TimeToLive
                 m_FireAnimation.SpriteInfo = m_CurrentShotInfo;
                 CanDamage = true;
                 if (m_FireAnimation.CanStartAnimating())
+                {
                     m_FireAnimation.Finished = false;
+                }
+                LockRotation = true;
             }
-            ////if i delete this here the show will not follow the player
+            ////if i delete this here the shot will not follow the player
             //if (m_CurrentShotInfo != null)
             //{
             //    float leftAngle = rotationAngle - (Spread / (NumberOfBullets - 1));
@@ -175,6 +178,7 @@ namespace TimeToLive
             else if (Firing)
             {
                 Firing = false;
+                LockRotation = false;
                 m_ElapsedFrames = FireRate;
                 if (m_ReloadSound != null)
                 {

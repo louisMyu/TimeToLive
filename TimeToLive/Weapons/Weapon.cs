@@ -13,6 +13,7 @@ namespace TimeToLive
     [DataContract]
     public abstract class Weapon
     {
+        public bool LockRotation;
         public WeaponStats WeaponStatistics;
         public string Name;
         protected SoundEffectInstance m_ShotSound;

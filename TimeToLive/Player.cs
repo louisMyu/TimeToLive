@@ -325,13 +325,18 @@ namespace TimeToLive
                         {
                             m_MoveToward = new Vector2(0, 0);
                         }
+                        bool lockRotation = false;
                         foreach (Weapon w in m_Weapons)
                         {
-                            if (!w.Firing)
+                            if (w.LockRotation)
                             {
-                                //RotationAngle += UI.RotationDelta;
-                                RotationAngle = (float)Math.Atan2(-acceleration.Y, acceleration.X);
+                                lockRotation = true;
+                                break;
                             }
+                        }
+                        if (!lockRotation)
+                        {
+                            RotationAngle = (float)Math.Atan2(-acceleration.Y, acceleration.X);
                         }
                     }
                     if (IsStopDown)
