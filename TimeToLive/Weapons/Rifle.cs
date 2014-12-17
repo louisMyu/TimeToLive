@@ -98,10 +98,12 @@ namespace TimeToLive
                 m_ChargeSound = SoundBank.GetSoundInstance("SoundRifleCharge");
                 m_ChargeSound.Play();
             }
-            if (Firing && m_FireAnimation.FrameCounter < CHARGE_TIME)
+
+            if (m_FireAnimation.Animating && m_FireAnimation.FrameCounter < CHARGE_TIME)
             {
-                float leftAngle = rotationAngle - (Spread / (NumberOfBullets - 1));
+                float leftAngle = rotationAngle;
                 m_CurrentShotInfo.Position = gunMountPoint;
+                m_CurrentShotInfo.Rotation = rotationAngle;
                 LeftAngle = leftAngle;
                 foreach (Line line in m_BulletLines)
                 {

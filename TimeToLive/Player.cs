@@ -330,9 +330,7 @@ namespace TimeToLive
                             if (!w.Firing)
                             {
                                 //RotationAngle += UI.RotationDelta;
-
                                 RotationAngle = (float)Math.Atan2(-acceleration.Y, acceleration.X);
-
                             }
                         }
                     }

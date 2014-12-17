@@ -271,7 +271,6 @@ namespace TimeToLive
                 case GameState.Playing:
                     ScreenManager.GraphicsDevice.SetRenderTarget(backgroundTexture);
                     _spriteBatch.Begin();
-                    UserInterface.DrawBackground(_spriteBatch);
                     UserInterface.DrawBakedGibs(_spriteBatch, m_PhysicsManager);
                     _spriteBatch.End();
                     ScreenManager.GraphicsDevice.SetRenderTarget(null);
