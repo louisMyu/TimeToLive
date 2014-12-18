@@ -116,7 +116,13 @@ namespace TimeToLive
             AllGameObjects.RemoveAll(x => x.CanDelete);
             PowerUpItems.RemoveAll(x => x.CanDelete);
             AnimatingExplosions.RemoveAll(x => x.CanDelete);
-
+            for (int x = 0; x < GameObjectGrid.Length; ++x)
+            {
+                for (int y = 0; y < GameObjectGrid[0].Length; ++y)
+                {
+                    GameObjectGrid[x][y].RemoveAll(obj => obj.CanDelete);
+                }
+            }
             for (int i = 0; i < SlimeTrails.Count; ++i)
             {
                 if (!SlimeTrails[i].Alive)

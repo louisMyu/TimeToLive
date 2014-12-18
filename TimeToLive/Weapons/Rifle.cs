@@ -84,7 +84,6 @@ namespace TimeToLive
             if (!Firing && shotFired && CanFire())
             {
                 Firing = true;
-                LockRotation = true;
                 m_FireAnimation.SpriteInfo = m_CurrentShotInfo;
                 CanDamage = false;
                 if (m_FireAnimation.CanStartAnimating())

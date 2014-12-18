@@ -71,7 +71,7 @@ namespace TimeToLive
 
             Vector2 viewport = new Vector2(GameWidth, GameHeight);
             Vector2 textSize = ColunaFont.MeasureString("00:00:00");
-            DeathTimerScale = Utilities.GetSpriteScaling(new Vector2((int)((viewport.X) * 0.1), (int)((viewport.Y) * 0.1)), textSize);
+            DeathTimerScale = Utilities.GetSpriteScaling(new Vector2((int)((viewport.X) * 0.2), (int)((viewport.Y) * 0.2)), textSize);
             Vector2 scaledTextSize = textSize*DeathTimerScale;
             Vector2 textPosition = new Vector2(viewport.X - (scaledTextSize.X/2)-10, (scaledTextSize.Y/2)+ 10);
             DeathTimerPosition = textPosition;
@@ -180,7 +180,7 @@ namespace TimeToLive
         public void DrawDeathTimer(SpriteBatch spriteBatch)
         {
             string timeToDeathString = TimeToDeath.ToString(@"mm\:ss\:ff");
-            spriteBatch.DrawString(ColunaFont, timeToDeathString, DeathTimerPosition, Color.Black * 0.45f, 0, 
+            spriteBatch.DrawString(ColunaFont, timeToDeathString, DeathTimerPosition, Color.Black * 0.75f, 0, 
                                     DeathTimerOrigin, DeathTimerScale, SpriteEffects.None, 0.0f);
         }
 

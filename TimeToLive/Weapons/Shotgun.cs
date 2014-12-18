@@ -108,7 +108,6 @@ namespace TimeToLive
                 {
                     m_FireAnimation.Finished = false;
                 }
-                LockRotation = true;
             }
             ////if i delete this here the shot will not follow the player
             //if (m_CurrentShotInfo != null)
