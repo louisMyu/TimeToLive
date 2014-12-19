@@ -128,7 +128,6 @@ namespace TimeToLive
             }
             if (m_FireAnimation.CanDraw() && Firing)
             {
-                
                 //if frame is at 5
                 if (m_FireAnimation.FrameCounter == 20)
                 {
