@@ -206,5 +206,9 @@ namespace TimeToLive
         {
             spriteBatch.Draw(m_SkullBackground, new Vector2(0, 0), null, Color.White, 0.0f, new Vector2(0, 0), new Vector2(1, 1), SpriteEffects.None, 0.0f);
         }
+        public void DrawPlayerStatusText(string text)
+        {
+
+        }
     }
 }
