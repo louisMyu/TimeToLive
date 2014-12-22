@@ -204,7 +204,7 @@ namespace TimeToLive
                         //so that the game will draw the zombie intersecting the player
                         GlobalObjectManager.Update(m_Player, customElapsedTime);
                         m_Player.Update(customElapsedTime);
-                        m_Player.CheckCollisions();
+                        m_Player.CheckCollisions(UserInterface);
 
                         m_Player.CheckWeaponHits();
                         //cleanup dead objects
@@ -293,6 +293,7 @@ namespace TimeToLive
                     GlobalObjectManager.Draw(_spriteBatch);
                     m_Player.Draw(_spriteBatch);
                     GlobalObjectManager.DrawExplosions(_spriteBatch);
+                    UserInterface.DrawStatusTexts(_spriteBatch);
                     UserInterface.DrawDeathTimer(_spriteBatch);
                     _spriteBatch.End();
                     break;

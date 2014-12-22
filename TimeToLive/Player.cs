@@ -96,7 +96,7 @@ namespace TimeToLive
             DrawRedFlash = false;
         }
         //check collisions with things
-        public void CheckCollisions()
+        public void CheckCollisions(UI ui)
         {
             //float nearestLength = float.MaxValue;
             List<List<GameObject>> objectsToCheck = ObjectManager.GetCellsOfRectangle(Bounds);
@@ -116,8 +116,10 @@ namespace TimeToLive
                         if (ob is IEnemy && !ob.CanDelete)
                         {
                             IEnemy enemy = ob as IEnemy;
+                            TimeSpan damage = enemy.GetDamageAmount();
                             //get the amount of time that should be removed from the enemy and remove it from the player
-                            //TimeToDeath -= enemy.GetDamageAmount();
+                            TimeToDeath -= damage;
+                            ui.AddStatusText("- " + damage.TotalSeconds + " sec", this);
                             //do collision should take care of removing the enemy
                             enemy.DoCollision(this);
                             if (TimeToDeath.TotalSeconds <= 0)
@@ -213,7 +215,6 @@ namespace TimeToLive
         //moves a set amount per frame toward a certain location
         public override void Move(Microsoft.Xna.Framework.Vector2 loc, TimeSpan elapsedTime)
         {
-            
             if (Input.UseAccelerometer)
             {
                 base.Move(loc, elapsedTime);

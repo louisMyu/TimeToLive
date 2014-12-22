@@ -12,7 +12,7 @@ using System.IO;
 
 namespace TimeToLive
 {
-    class UI
+    public class UI
     {
         private TimeSpan TimeToDeath;
         private Texture2D m_StatusBackground;
@@ -33,7 +33,7 @@ namespace TimeToLive
         public Effect m_SkullLeftEyePointLight;
         public Effect m_SkullRightEyePointLight;
 
-        private SpriteFont ColunaFont;
+        private static SpriteFont ColunaFont;
         public static float RotationDelta;
 
         private int BackGroundHueCounter = -250;
@@ -44,6 +44,8 @@ namespace TimeToLive
         //start increasing oscillation at 30 seconds
         private const int OSCILLATE_START = 10;
         private const int SCALE = 200;
+
+        private List<FadeString> m_FadeStrings;
 
         private List<ExplodedPart> BakedGibs = new List<ExplodedPart>();
         public static List<ExplodedPart> ActiveGibs = new List<ExplodedPart>();
@@ -88,7 +90,8 @@ namespace TimeToLive
             m_SkullRightEyePointLight = ((Game1)ScreenManager.Game).LoadShader("TimeToLive.Shaders.pointlight.mgfxo");
             m_SkullLeftEyePointLight.Parameters["centerX"].SetValue(546.0f);
             m_SkullLeftEyePointLight.Parameters["centerY"].SetValue(307.0f);
-
+            m_FadeStrings = new List<FadeString>();
+            FadeString.LoadFont(content);
         }
 
         public void Update(TimeSpan elapsedTime)
@@ -123,6 +126,11 @@ namespace TimeToLive
                     i--;
                 }
             }
+            foreach (FadeString f in m_FadeStrings)
+            {
+                f.Update(elapsedTime);
+            }
+            m_FadeStrings.RemoveAll(x => x.Done);
         }
 
         public void ProcessInput(Player p, TouchCollection input)
@@ -198,17 +206,89 @@ namespace TimeToLive
         {
             TimeToDeath = time;
         }
-        public void DrawMainMenu(SpriteBatch spriteBatch)
-        {
-            
-        }
         public void DrawSkullBackground(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(m_SkullBackground, new Vector2(0, 0), null, Color.White, 0.0f, new Vector2(0, 0), new Vector2(1, 1), SpriteEffects.None, 0.0f);
         }
-        public void DrawPlayerStatusText(string text)
-        {
 
+        
+        public void AddStatusText(string text, Player p)
+        {
+            Vector2 pos = p.Position;
+            pos.Y -= 10;
+            FadeString str = new FadeString(text, 1500f, pos, 150);
+            m_FadeStrings.Add(str);
+        }
+        public void DrawStatusTexts(SpriteBatch spriteBatch)
+        {
+            foreach (FadeString f in m_FadeStrings)
+            {
+                f.Draw(spriteBatch);
+            }
+        }
+        //this is a string that fades out over time that is meant to float over the player and give status
+        private class FadeString
+        {
+            private float m_FadeoutTime;
+            private Vector2 m_Position;
+            private string m_Text;
+            private int m_Distance;
+            private float m_TimeTraveled;
+            public bool Done;
+            private float m_Alpha;
+            private static SpriteFont m_Font;
+            public FadeString(string text, float fadeTime, Vector2 position, int dist)
+            {
+                m_Text = text;
+                m_FadeoutTime = fadeTime;
+                m_Position = position;
+                m_Distance = dist;
+                m_TimeTraveled = 0;
+                Done = false;
+                m_Alpha = 1.0f;
+                Vector2 measure =  m_Font.MeasureString(m_Text);
+                m_Origin = measure / 2;
+                m_Scale = new Vector2(1, 0.5f);
+            }
+            public static void LoadFont(ContentManager content)
+            {
+                if (m_Font == null)
+                {
+                    m_Font = content.Load<SpriteFont>("ColunaFont");
+                }
+            }
+            public void Update(TimeSpan time)
+            {
+                if (Done)
+                {
+                    return;
+                }
+                float timeInMilli = (float)time.TotalMilliseconds;
+                float timeRatio = timeInMilli / m_FadeoutTime;
+                int pixelsToMove = (int)Math.Round((float)m_Distance * timeRatio);
+                m_TimeTraveled += timeInMilli;
+                m_Position.Y -= pixelsToMove;
+                m_Alpha -= 1.0f * timeRatio;
+                if (m_TimeTraveled >= m_FadeoutTime)
+                {
+                    Done = true;
+                }
+            }
+            private Vector2 m_Origin;
+            private Vector2 m_Scale;
+            public void Draw(SpriteBatch spriteBatch)
+            {
+                if (m_Font == null )
+                {
+                    return;
+                }
+                if (Done)
+                {
+                    return;
+                }
+                spriteBatch.DrawString(ColunaFont, m_Text, m_Position, Color.White * m_Alpha, 0,
+                         m_Origin, m_Scale, SpriteEffects.None, 0.0f);
+            }
         }
     }
 }
