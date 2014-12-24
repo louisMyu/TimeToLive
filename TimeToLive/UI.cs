@@ -226,6 +226,7 @@ namespace TimeToLive
                 f.Draw(spriteBatch);
             }
         }
+
         //this is a string that fades out over time that is meant to float over the player and give status
         private class FadeString
         {
