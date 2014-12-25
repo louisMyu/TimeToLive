@@ -20,7 +20,6 @@ namespace TimeToLive
         public static List<SlimeTrail> SlimeTrails;
         public static List<PowerUp> PowerUpItems;
 
-
         public static Random ZombieRandom = new Random();
         public double FrameCounter = 0;
         public static bool itemMade = false;
