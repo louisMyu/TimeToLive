@@ -59,6 +59,7 @@ namespace TimeToLive
         public bool CanDelete = false;
         public GameObject(PhysicsManager manager)
         {
+
             if (m_Bounds == null)
             {
                 m_Bounds = new Rectangle();
