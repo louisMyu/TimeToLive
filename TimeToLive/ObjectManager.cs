@@ -56,7 +56,7 @@ namespace TimeToLive
 
             m_SpawnTimers = new List<SpawnTimer>();
             m_SpawnTimers.Add(new SpawnTimer(850, SpawnZombie, "Zombie"));
-            m_SpawnTimers.Add(new SpawnTimer(4000, SpawnFace, "Anubis"));
+            m_SpawnTimers.Add(new SpawnTimer(3000, SpawnFace, "Anubis"));
             m_SpawnTimers.Add(new SpawnTimer(4000, SpawnShroom, "Shroom"));
             m_SpawnTimers.Add(new SpawnTimer(5500, MakeItem, "Item"));
             m_SpawnTimers.Add(new SpawnTimer(10000, MakeSlime, "Slime"));
