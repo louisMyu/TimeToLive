@@ -194,7 +194,7 @@ namespace TimeToLive
         public void LoadContent(PhysicsManager physManager)
         {
             m_InitialPosition = Position;
-            Texture = TextureBank.GetTexture("Player");
+            Texture = TextureBank.GetTexture("GameDude\\GameDude_RedWithGun");
             base.LoadContent();
             foreach (Weapon w in m_Weapons)
             {
