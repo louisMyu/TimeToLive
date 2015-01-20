@@ -357,7 +357,7 @@ namespace TimeToLive
                     Vector2 playerVel = m_Moving ? m_MoveToward : new Vector2(0, 0);
 
                     Matrix rotMatrix = Matrix.CreateRotationZ(RotationAngle);
-                    Vector2 offsetFromPlayer = new Vector2(Texture.Width/2, 0);
+                    Vector2 offsetFromPlayer = new Vector2(Texture.Width/2+2, 14);
                     m_WeaponShotPoint = Position + Vector2.Transform(offsetFromPlayer, rotMatrix);
                     foreach (Weapon w in m_Weapons)
                     {

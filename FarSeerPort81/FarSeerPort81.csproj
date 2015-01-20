@@ -201,9 +201,10 @@
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>Z:\GIT\MonogameDevelop\MonoGame\MonoGame.Framework\bin\WindowsPhone81\AnyCPU\Debug\MonoGame.Framework.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="Z:\GIT\MonoGameDevelop2\MonoGame.Framework\MonoGame.Framework.WindowsPhone81.csproj">
+      <Project>{6522b7e9-25a5-4250-b164-42cc2c4eccad}</Project>
+      <Name>MonoGame.Framework.WindowsPhone81</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

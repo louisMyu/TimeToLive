@@ -287,7 +287,7 @@ namespace TimeToLive
                 {
                     return;
                 }
-                spriteBatch.DrawString(ColunaFont, m_Text, m_Position, Color.White * m_Alpha, 0,
+                spriteBatch.DrawString(ColunaFont, m_Text, m_Position, Color.Red * m_Alpha, 0,
                          m_Origin, m_Scale, SpriteEffects.None, 0.0f);
             }
         }
