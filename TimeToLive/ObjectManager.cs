@@ -255,8 +255,8 @@ namespace TimeToLive
                     nearPlayer = false;
                 }
             }
-            //int powerUpType = ZombieRandom.Next(2);
-            int powerUpType = 0;
+            int powerUpType = ZombieRandom.Next(2);
+            //int powerUpType = 0;
             if (powerUpType == 0) 
             {
                 m_PowerUp = new CheatPowerUp(CheatPowerUp.CheatTypes.Time, m_PhysicManager);
