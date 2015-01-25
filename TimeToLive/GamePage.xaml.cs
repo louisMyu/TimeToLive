@@ -25,15 +25,16 @@ namespace TimeToLive
         readonly Game1 _game;
         public GamePage()
         {
-            hideShit();
             this.InitializeComponent();
+            hideShit();
         }
 
         public GamePage(string launchArguments)
         {
-            hideShit();
             _game = XamlGame<Game1>.Create(launchArguments, Window.Current.CoreWindow, this);
+            hideShit();
         }
+
         //why was it so hard to find how to do this?!
         async void hideShit()
         {

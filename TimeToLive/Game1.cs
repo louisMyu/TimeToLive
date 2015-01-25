@@ -50,6 +50,7 @@ namespace TimeToLive
             //    m_Player = p;
             //}
             ////init object manager and set objects for it
+            
             //GlobalObjectManager.Init(m_Player, Content, m_World);
             TextureBank.SetContentManager(Content);
             m_ScreenManager.AddScreen(new BackgroundScreen(), null);
