@@ -36,9 +36,8 @@ namespace TimeToLive
         }
 
         //why was it so hard to find how to do this?!
-        async void hideShit()
+        private void hideShit()
         {
-            await Windows.UI.ViewManagement.StatusBar.GetForCurrentView().HideAsync();
             Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().SuppressSystemOverlays = true;
         }
     }

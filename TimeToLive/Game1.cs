@@ -19,6 +19,9 @@ namespace TimeToLive
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             m_ScreenManager = new ScreenManager(this);
         }
@@ -32,9 +35,6 @@ namespace TimeToLive
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
-
-            _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
             //m_World = new World(new Vector2(0, 0));
             //ConvertUnits.SetDisplayUnitToSimUnitRatio(5);
