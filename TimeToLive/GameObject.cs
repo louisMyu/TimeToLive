@@ -9,41 +9,27 @@ using System.Runtime.Serialization;
 
 namespace TimeToLive
 {
-    [KnownType(typeof(GameObject))]
-    [KnownType(typeof(Zombie))]
-    [KnownType(typeof(PowerUp))]
-    [DataContract]
+
     public class GameObject
     {
         protected PhysicsManager m_PhysicsManager;
         protected static Random RANDOM_GENERATOR = new Random(69);
-        [IgnoreDataMember]
         private Vector2 m_Position;
-        [DataMember]
         public Vector2 Position { get { return m_Position; } set { m_Position = value; } }
-        [IgnoreDataMember]
+        
         public Texture2D Texture;
-        [IgnoreDataMember]
+        private Texture2D OutlineTexture;
+
         protected List<Texture2D> ExplodedParts = new List<Texture2D>();
-        [DataMember]
         public int Width { get; set; }
-        [DataMember]
         public int Height { get; set; }
-        [IgnoreDataMember]
         public Rectangle m_Bounds;
-        [DataMember]
         public Rectangle Bounds { get { return m_Bounds; } set { m_Bounds = value; } }
-        [IgnoreDataMember]
         public Vector2 m_Origin = new Vector2();
-        [DataMember]
         public Vector2 Origin { get { return m_Origin; } set { m_Origin = value; } }
-        [IgnoreDataMember]
         public Vector2 m_Direction = new Vector2();
-        [DataMember]
         public Vector2 Direction { get { return m_Direction; } set { m_Direction = value; } }
-        [IgnoreDataMember]
         private float m_RotationAngle = 0.0f;
-        [DataMember]
         public float RotationAngle
         {
             get
